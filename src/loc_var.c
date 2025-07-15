@@ -39,7 +39,7 @@ int	update_val(t_env **minish_envp, t_env **minish_local_var, t_env *next_var, c
 	if(next_var->value)
 		free(next_var->value);
 	next_var->value = ft_strdup(after_equal);
-	if(next_var->value)
+	if(!next_var->value)
 		return(0);
 	return(1);
 }
@@ -59,7 +59,7 @@ int add_loc_var(t_env **minish_envp, t_env **minish_local_var, char *input)
 		return(0);
 	next_var = get_VAR(minish_envp, minish_local_var, pres_var);
 	if(next_var != NULL)
-		return(update_val(minish_envp, minish_local_var, next_var, equal + 1, pres_var));						//malloc error
+		return(update_val(minish_envp, minish_local_var, next_var, equal + 1, pres_var));
 	set_next_var(&next_var, input, equal);
 	next_var->next = NULL;
 	if(!*minish_local_var)
@@ -116,7 +116,7 @@ char *dollar_interrogation(t_minishell minishell, char *string, size_t **str_ind
 {
 	char *exit_status_str;
 	char *renew_str;
-	
+
 	renew_str = ft_strdup("");
 	if (!renew_str)
 		return (NULL);
@@ -160,7 +160,7 @@ char *replace_var(t_minishell minishell, char *string, size_t *str_ind, char *te
 	actual_var = get_VAR(&minishell.envp, &minishell.local_var, pres_var);
 	if(actual_var)
 		renew_str = ft_strjoin(temp, actual_var->value);
-	else 
+	else
 		return (temp); // If variable not found, return the original string
 	free(temp);
 	if (string[(*str_ind)] == '$' && (string[(*str_ind) + 1] != '\0') && string[(*str_ind) + 1] != '$')

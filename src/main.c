@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:43 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/15 15:16:39 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/15 22:09:31 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,11 @@ int treat_input(t_minishell **minish, char *input)
 		return(1);
 	if(!first_check(input))
 		return(3);
-	if(add_loc_var(&(*minish)->envp,&(*minish)->local_var, input))
+	(*minish)->parsed_string = get_new_string(**minish, input);
+	if(!(*minish)->parsed_string)
+		return(0);		//handle error
+	if(add_loc_var(&(*minish)->envp,&(*minish)->local_var, (*minish)->parsed_string))
 		return(1);
-	//(*minish)->parsed_string = get_new_string(**minish, input);
-	//if(!(*minish)->parsed_string)
-	//	return(0);		//handle error
 	cmd_as_tokens = tokenizer(input);
 	if(!cmd_as_tokens)
 		return(3);		//handle errors
@@ -68,7 +68,7 @@ int	main(int ac, char **av, char **envp)
 	{
 		prompt = get_prompt(&minish->envp);
 		if(!prompt)
-			break;
+			exit_shell("Something went wrong while displaying prompt", minish);
 		input = readline(prompt);
 		enable_echoctl();
 		free(prompt);
@@ -76,6 +76,7 @@ int	main(int ac, char **av, char **envp)
 			break;
 		if (input && *input)
     		add_history(input);
+		//memory safe until here I think
 		if (treat_input(&minish, input) == 3)
 			minish->last_exit_status = 2;
 		free(input);

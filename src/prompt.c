@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 17:45:41 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/15 17:45:44 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/15 21:56:16 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,23 @@ char *get_prompt(t_env **envp)
 	char *path;
 
 	prompt = NULL;
-	user_var = get_VAR(envp, NULL, "USER");
+	user_var = get_VAR(envp, NULL, "USER");	//mightbe a pb when unsetting USER
+	// printf("VAR : %s\n", user_var->VAR);
+	// printf("value : %s\n", user_var->value);
+	// printf("len : %ld\n", ft_strlen(user_var->value));
+	// exit(1);
 	if(!user_var || !user_var->value)
-		return(NULL);			//handle error ?
-	user = ft_strjoinchar(user_var->value, ':');
-	if(!user)
 		user = ft_strdup("user :");
+	else
+		user = ft_strjoinchar(user_var->value, ':');
 	if(!user)
 		return(NULL);
 	path = get_curr_path(envp);
 	if(!path)
-		return(NULL);		//malloc error;
+	{
+		free(user);
+		return(NULL);
+	}
 	temp = ft_strjoin("minishell@", user);
 	free(user);
 	if(!temp)
