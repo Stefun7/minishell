@@ -20,13 +20,13 @@ int	remove_env_var(t_env **head, const char *var)
 	prev = NULL;
 	while (current)
 	{
-		if (ft_strcmp(current->VAR, var) == 0)
+		if (ft_strcmp(current->var, var) == 0)
 		{
 			if (prev)
 				prev->next = current->next;
 			else
 				*head = current->next;
-			free(current->VAR);
+			free(current->var);
 			free(current->value);
 			free(current);
 			return (1);
@@ -47,9 +47,9 @@ t_env *find_first(t_env *envp)
 	envp = envp->next;
 	while (envp)
 	{
-		if (ft_strcmp(envp->VAR, min->VAR) < 0)
+		if (ft_strcmp(envp->var, min->var) < 0)
 			min = envp;
-		else if (ft_strcmp(envp->VAR, min->VAR) == 0)
+		else if (ft_strcmp(envp->var, min->var) == 0)
 		{
 			if (ft_strcmp(envp->value, min->value) < 0)
 				min = envp;
@@ -66,8 +66,8 @@ int	is_between_env(t_env *envp, t_env *smallest, t_env *bigger)
 
 	if (!envp || !smallest || !bigger)
 		return (-1);
-	cmp_small = ft_strcmp(envp->VAR, smallest->VAR);
-	cmp_big = ft_strcmp(envp->VAR, bigger->VAR);
+	cmp_small = ft_strcmp(envp->var, smallest->var);
+	cmp_big = ft_strcmp(envp->var, bigger->var);
 	if (cmp_small > 0 && cmp_big < 0)
 		return (0);
 	if (cmp_small == 0)
@@ -89,7 +89,7 @@ t_env	*create_env_node(char *var, char *value)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	new->VAR = strdup(var);
+	new->var = strdup(var);
 	new->value = strdup(value);
 	new->next = NULL;
 	return (new);
@@ -124,7 +124,7 @@ int update_env_value(t_env *env_list, const char *var_name, const char *new_valu
 	current = env_list;
     while (current)
     {
-        if (ft_strcmp(current->VAR, var_name) == 0)
+        if (ft_strcmp(current->var, var_name) == 0)
         {
             if (current->value)
                 free(current->value);
@@ -150,7 +150,7 @@ char	**env_list_to_array(t_env *env, int len)
 	i = 0;
 	while (env && i < len)
 	{
-		env_array[i] = join_var_value(env->VAR, env->value);
+		env_array[i] = join_var_value(env->var, env->value);
 		if (!env_array[i])
 		{
 			free_tab(env_array);

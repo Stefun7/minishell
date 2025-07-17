@@ -21,7 +21,6 @@ int unclosed_quotes(char *input)
 int first_check(char *input)
 {
 	size_t index;
-
 	index = 0;
 
 	if (unclosed_quotes(input))
@@ -36,7 +35,6 @@ int first_check(char *input)
 		write(2, "Syntax error near unexpected token `|'\n", 40);
 		return(0);
 	}
-	//not sure about this check
 	while(input[index])
 	{
 		if((unsigned char)input[index] < 32 && input[index] != '\t' && input[index] != '\n')

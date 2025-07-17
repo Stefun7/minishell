@@ -17,7 +17,7 @@ int update_SHLVL(t_env **env)
 	int level;
 
 	// ft_printf(" Updating SHLVL...\n");
-	if (!(*env)->value)		//that means strdup failed no ? why continuing and not just quiting then ?
+	if (!(*env)->value)		//steff it could be exported without value and it's standard behaviro to reset it
 		level = 0;
 	else
 		level = ft_atoi((*env)->value);
@@ -31,7 +31,7 @@ int update_SHLVL(t_env **env)
 	new_value = ft_itoa(level);
 	if (!new_value)
 		return (0); // handle error
-	if((*env)->value);
+	if((*env)->value)
 		free(((*env))->value);
 	(*env)->value = new_value;
 	return (1);
@@ -43,22 +43,22 @@ int	set_next_var(t_env **next_envv, char *envv, char *equal)
 	if(!envv)		//check if works with VAR=	  like an empty value
 		return(0);
 	*next_envv = malloc(sizeof(t_env));
-	(*next_envv)->VAR = NULL;
+	(*next_envv)->var = NULL;
 	(*next_envv)->value = NULL;
 	if(!*next_envv)
 		return(0);
-	(*next_envv)->VAR = ft_substr(envv, 0, equal - envv);
-	if (!(*next_envv)->VAR )
+	(*next_envv)->var = ft_substr(envv, 0, equal - envv);
+	if (!(*next_envv)->var )
 		return(0);
 	(*next_envv)->value = ft_strdup(equal + 1);
-	if (ft_strcmp((*next_envv)->VAR, "SHLVL") == 0)
+	if (ft_strcmp((*next_envv)->var, "SHLVL") == 0)
 		return (update_SHLVL(next_envv));	//update SHLVL if it is set
 	////////////////////////////////////////
 	//need to return 0 if strdup of (*next_envv)>value missed and free before it
 	////////////////////////////////////////
 	if (!(*next_envv)->value)
 	{
-		free((*next_envv)->VAR);
+		free((*next_envv)->var);
 		free(*next_envv);
 		return(0);					//handle errors
 	}
@@ -109,7 +109,7 @@ t_env *get_VAR(t_env **minish_envp, t_env **minish_local_var, char *VAR)
 	travel_var = *minish_envp;
 	while (travel_var)
 	{
-		if (ft_strcmp(travel_var->VAR, VAR) == 0)
+		if (ft_strcmp(travel_var->var, VAR) == 0)
 			return travel_var;
 		travel_var = travel_var->next;
 	}
@@ -118,7 +118,7 @@ t_env *get_VAR(t_env **minish_envp, t_env **minish_local_var, char *VAR)
 		travel_var = *minish_local_var;
 		while (travel_var)
 		{
-			if(ft_strncmp((travel_var)->VAR, VAR, ft_strlen(travel_var->VAR)) == 0)
+			if(ft_strncmp((travel_var)->var, VAR, ft_strlen(travel_var->var)) == 0)
 				return(travel_var);
 			travel_var = travel_var->next;
 		}

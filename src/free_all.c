@@ -12,10 +12,10 @@
 
 # include "../inc/minishell.h"
 
-void	exit_shell(char *error_message, t_minishell *minish)
+void	exit_shell(char *error_message, t_minishell **minish)
 {
-	free_minish_total(&minish);
-	printf("%s", error_message);
+	free_minish_total(minish);
+	write(2, error_message, ft_strlen(error_message));
 	exit(-1);
 }
 
@@ -29,8 +29,6 @@ void	free_instructions(t_instructions *instru, int count)
 	i = 0;
 	while (i < count)
 	{
-		free_tokens(instru[i].executable);
-		free(instru[i].command);
 		free_redirs(instru[i].in_redir, instru[i].nb_files_in);
 		free_redirs(instru[i].out_redir, instru[i].nb_files_out);
 		if (instru[i].exec)
@@ -75,6 +73,6 @@ void	free_minish_total(t_minishell **minish)
 		free_instructions((*minish)->instru, (*minish)->number_of_commands);
 	if ((*minish)->fd_pipes)
 		free((*minish)->fd_pipes);
-	// free(*minish); ??
+	free(*minish);
 	*minish = NULL;
 }

@@ -61,8 +61,8 @@ int builtin_env(t_env *envp)
 {
 	while (envp != NULL)
 	{
-		if (envp->VAR && envp->value)
-			ft_printf("%s=%s\n", envp->VAR, envp->value);
+		if (envp->var && envp->value)
+			ft_printf("%s=%s\n", envp->var, envp->value);
 		envp = envp->next;
 	}
 	return (0);
@@ -142,7 +142,7 @@ int builtin_cd(char **executables, t_minishell *minish)
 			perror("cd");
 			return 1;
 		}
-		else 
+		else
 			return 0;
 	}
 	return 1;
@@ -164,7 +164,7 @@ t_env *find_nth(t_env *smallest, t_env *envp)
 	bigger = NULL;
 	while (envp)
 	{
-		if (bigger == NULL && ft_strcmp(envp->VAR, smallest->VAR) > 0 )
+		if (bigger == NULL && ft_strcmp(envp->var, smallest->var) > 0 )
 			bigger = envp;
 		if (is_between_env(envp, smallest, bigger) == 0)
 			bigger = envp;
@@ -182,8 +182,8 @@ t_env *find_nth(t_env *smallest, t_env *envp)
 		return ;
 	while (smallest != NULL)
 	{
-		printf("declare -x %s=%s\n", smallest->VAR, smallest->value);
-		smallest = find_nth(smallest, envp);		
+		printf("declare -x %s=%s\n", smallest->var, smallest->value);
+		smallest = find_nth(smallest, envp);
 	}
  }
 int edit_env(char *content, t_minishell *minish)

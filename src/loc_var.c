@@ -59,7 +59,7 @@ int add_loc_var(t_env **minish_envp, t_env **minish_local_var, char *input)
 		return(0);
 	next_var = get_VAR(minish_envp, minish_local_var, pres_var);
 	if(next_var != NULL)
-		return(update_val(minish_envp, minish_local_var, next_var, equal + 1, pres_var));
+		return(update_val(minish_envp, minish_local_var, next_var, equal + 1, pres_var));						//malloc error
 	set_next_var(&next_var, input, equal);
 	next_var->next = NULL;
 	if(!*minish_local_var)
@@ -126,7 +126,9 @@ char *dollar_interrogation(t_minishell minishell, char *string, size_t **str_ind
 		exit_status_str = ft_itoa(minishell.last_exit_status); // Convert int to string
 		if (!exit_status_str)
 			return (NULL); // malloc error
-		renew_str = ft_strjoin(temp, exit_status_str); // Append to temp
+		renew_str = ft_strjoin(temp, exit_status_str); // Append to temp$µ
+		if (!renew_str)
+			return (free(exit_status_str), NULL); // malloc error
 		free(exit_status_str);
 		(**str_ind)++; // Move index forward
 	}
@@ -140,7 +142,6 @@ char *replace_var(t_minishell minishell, char *string, size_t *str_ind, char *te
 	t_env *actual_var;
 	char *pres_var;
 	char *renew_str;
-	char *next_temp;
 
 	len_var = 0;
 	(*str_ind)++;
@@ -155,81 +156,40 @@ char *replace_var(t_minishell minishell, char *string, size_t *str_ind, char *te
 	if(!pres_var)
 		return(NULL);	   //malloc error;
 	(*str_ind) += len_var;
-	// printf("str[%zu] : |%c|\n", *str_ind, string[*str_ind]);
-	// printf("pres_var : %s\n", pres_var);
 	actual_var = get_VAR(&minishell.envp, &minishell.local_var, pres_var);
 	if(actual_var)
 		renew_str = ft_strjoin(temp, actual_var->value);
 	else
 		return (temp); // If variable not found, return the original string
 	free(temp);
-	if (string[(*str_ind)] == '$' && (string[(*str_ind) + 1] != '\0') && string[(*str_ind) + 1] != '$')
-	{
-		next_temp = ft_strdup(renew_str);
-		free(renew_str);
-		if (!next_temp)
-			return (free(pres_var), NULL); // malloc error
-		return (replace_var(minishell, string, str_ind, next_temp));
-	}
 	return (renew_str);
 }
 
-char	*get_new_string(t_minishell minishell, char *string)
+char *get_new_string(t_minishell minishell, char *string)
 {
-	char *temp;
 	char *new_str;
 	bool in_double;
 	size_t str_ind;
-	size_t new_str_ind;
 
+	in_double  = false;
 	str_ind = 0;
-	new_str_ind = 0;
-	in_double = false;
 	new_str = ft_strdup("");
-	if(!new_str)
-		return(NULL);   //malloc error
-	while(string[str_ind])
+	if (!new_str)
+		return NULL;
+	while (string[str_ind])
 	{
-		temp = ft_strdup("");
-		if(string[str_ind] == '\"')
-		{
-			if(in_double == false)
-				in_double = true;
-			else
-				in_double = false;
-			str_ind++;
-		}
-		else if(string[str_ind] == '\'' && !in_double)
-		{
-			str_ind++;
-			while(string[str_ind] && string[str_ind] != '\'')
-			{
-				temp = new_str;
-				new_str = ft_strjoinchar(temp, string[str_ind]);
-				if(!new_str)
-					return(NULL);		//malloc errorr
-				str_ind++;
-			}
-			if(string[str_ind])
-				str_ind++;
-		}
-		else if (string[str_ind] == '$' && (string[str_ind + 1] != '\0' && string[str_ind + 1] != '$' ))
-		{
-			temp = new_str;
-			new_str = replace_var(minishell, string, (&str_ind), temp);
-			if(!new_str)
-				return(NULL);
-		}
+		if (string[str_ind] == '\"')
+			in_double = !in_double, str_ind++;
+		else if (string[str_ind] == '\'' && !in_double)
+			handle_single_quote(&new_str, string, &str_ind);
+		else if (is_expandable_dollar(string, str_ind, in_double))
+			handle_expand(&new_str, minishell, string, &str_ind);
 		else
-		{
-			temp = new_str;
-			new_str = ft_strjoinchar(temp, string[str_ind]);
-			if(!new_str)
-				return(NULL);
-			str_ind++;
-		}
+			append_char(&new_str, string[str_ind++]);
+		if (!new_str)
+			return NULL;
 	}
-	return(new_str);
+	return new_str;
 }
 
 int	var_already_there(t_env **minish_envp, t_env **minish_local_var, char *next_var)
@@ -239,7 +199,7 @@ int	var_already_there(t_env **minish_envp, t_env **minish_local_var, char *next_
 	travel_var = *minish_envp;
 	while(travel_var)
 	{
-		if(ft_strncmp((travel_var)->VAR, next_var, ft_strlen(travel_var->VAR) == 0))
+		if(ft_strncmp((travel_var)->var, next_var, ft_strlen(travel_var->var) == 0))
 		return(2);
 		travel_var = travel_var->next;
 	}
@@ -248,7 +208,7 @@ int	var_already_there(t_env **minish_envp, t_env **minish_local_var, char *next_
 		travel_var = *minish_local_var;
 		while(travel_var)
 		{
-			if(ft_strncmp((travel_var)->VAR, next_var, ft_strlen(travel_var->VAR) == 0))
+			if(ft_strncmp((travel_var)->var, next_var, ft_strlen(travel_var->var) == 0))
 				return(1);
 			travel_var = travel_var->next;
 		}
