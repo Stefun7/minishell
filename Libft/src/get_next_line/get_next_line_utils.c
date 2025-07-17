@@ -28,8 +28,8 @@ char	*ft_strdup(const char	*str)
 	size_t	len;
 	size_t	i;
 
-	if(!str)
-		return(NULL);
+	if (!str)
+		return (NULL);
 	i = 0;
 	len = ft_strlen((char *) str);
 	cpy = (char *)malloc(len + 1);

@@ -29,7 +29,7 @@ int	check_n_flags(char **argv)
 		if (is_n_flag(argv[i]))
 			i++;
 		else
-			break;
+			break ;
 	}
 	return (i);
 }

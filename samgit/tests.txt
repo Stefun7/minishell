@@ -1,1 +1,0 @@
-i discovered all files have to be opened or created its not enouhg to simply verify the accesses

@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:11:14 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/01 20:39:48 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/17 17:44:42 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@ int heredoc_handle(char *stop)
 	tmp_file = "/tmp/.minishell_heredoc";
 	fd = open(tmp_file, O_WRONLY | O_CREAT | O_TRUNC, 0600);
 	if (fd == -1)
-		return(-1);
-	while(1)
+		return (-1);
+	while (1)
 	{
 		input = readline("> ");
 		if (input == NULL)
-			break;
-		if(input && (ft_strncmp(input, stop, ft_strlen(input)) == 0))
+			break ;
+		if (input && (ft_strncmp(input, stop, ft_strlen(input)) == 0))
 		{
 			free(input);
-			break;
+			break ;
 		}
 		write(fd, input, ft_strlen(input));
 		write(fd, "\n", 1);
@@ -39,7 +39,7 @@ int heredoc_handle(char *stop)
 	close(fd);
 	fd = (open(tmp_file, O_RDONLY));
 	unlink(tmp_file);
-	return(fd);
+	return (fd);
 }
 
 void	treat_redir_in(t_minishell *minish, t_redir *redir, int parser, int *fd)
@@ -60,7 +60,7 @@ void	treat_redir_in(t_minishell *minish, t_redir *redir, int parser, int *fd)
 	else if (redir->type == HEREDOC)
 	{
 		(*fd) = heredoc_handle(redir->file_name);
-		if((*fd) == -1)
+		if ((*fd) == -1)
 			error(minish, "heredoc error", NULL, 130); /// exit with sigint ??
 
 	}
@@ -74,7 +74,7 @@ void treat_redir_out(t_minishell *minish, t_redir *redir, int parser, int *fd)
 		(*fd) = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (redir->type == APPEND)
 		(*fd) = open(redir->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	if((*fd) == -1)
+	if ((*fd) == -1)
 		error(minish, "couldn't open file", redir->file_name, 126);
 }
 
@@ -98,7 +98,7 @@ void access_test(t_minishell *minish, t_instructions *instr, int parser)
 	while (index < instr->nb_files_out)
 	{
 		treat_redir_out(minish, &instr->out_redir[index], parser, &fd);
-		if(index != instr->nb_files_out - 1)
+		if (index != instr->nb_files_out - 1)
 			close(fd);
 		else
 			instr->pipe[1] = fd;
@@ -153,7 +153,7 @@ void no_redirection_proc(t_minishell *minish, t_instructions *instr, int parser)
 // 		else if (redir->type == HEREDOC)
 // 		{
 // 			fd = heredoc_handle(redir->file_name);
-// 			if(fd == -1);
+// 			if (fd == -1);
 // 				error(minish, "heredoc error", parser);
 // 		}
 // 			// HEREDOC ?
@@ -174,9 +174,9 @@ void no_redirection_proc(t_minishell *minish, t_instructions *instr, int parser)
 // 			fd = open(redir->file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 // 		else if (redir->type == APPEND)
 // 			fd = open(redir->file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-// 		if(fd == -1)
+// 		if (fd == -1)
 // 			error(minish, "couldn't open file", parser);
-// 		if(index != instr->nb_files_out - 1)
+// 		if (index != instr->nb_files_out - 1)
 // 			close(fd);													//what does this do ?
 // 		else
 // 			instr->pipe[1] = fd;

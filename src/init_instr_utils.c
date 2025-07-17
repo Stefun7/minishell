@@ -8,9 +8,9 @@ t_token **init_executable(t_token **cmd_as_tokens, t_instructions *instru, int i
 	instru[index].executable = (cmd_as_tokens);
 	while (instru[index].executable[count] != NULL)
 	{
-		if(is_executable_token(instru[index].executable[count]->type))
+		if (is_executable_token(instru[index].executable[count]->type))
 		{
-			if(!instru[index].executable[count]->content)
+			if (!instru[index].executable[count]->content)
 				instru[index].executable[count]->content = ft_strdup("");
 			else
 				instru[index].executable[count]->content = get_new_string(*minish, instru[index].executable[count]->content);

@@ -6,11 +6,11 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:59 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/15 15:19:29 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/17 17:43:50 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../inc/minishell.h"
+#include "../inc/minishell.h"
 
 void	exit_shell(char *error_message, t_minishell **minish)
 {
@@ -51,7 +51,7 @@ void	free_instructions(t_instructions *instru, int count)
 // {
 // 	if (!minish || !*minish)
 // 		return ;
-// 	if((*minish)->parsed_string)
+// 	if ((*minish)->parsed_string)
 // 		free((*minish)->parsed_string);
 // 	if ((*minish)->fd_pipes)
 // 		free((*minish)->fd_pipes);
@@ -67,7 +67,7 @@ void	free_minish_total(t_minishell **minish)
 		free_envp((*minish)->envp);
 	if ((*minish)->local_var)
 		free_envp((*minish)->local_var);
-	if((*minish)->parsed_string)
+	if ((*minish)->parsed_string)
 		free((*minish)->parsed_string);
 	if ((*minish)->instru)
 		free_instructions((*minish)->instru, (*minish)->number_of_commands);

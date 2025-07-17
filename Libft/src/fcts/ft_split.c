@@ -69,7 +69,7 @@ static char	*new_elem(char *str, char c)
 	elem[i] = '\0';
 	return (elem);
 }
-// fonctionne avec return(ft_strtrim(elem,"")) pour optimiser memoire utilisée
+// fonctionne avec return (ft_strtrim(elem,"")) pour optimiser memoire utilisée
 
 char	**ft_split(char const *s, char c)
 {

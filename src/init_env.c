@@ -31,7 +31,7 @@ int update_SHLVL(t_env **env)
 	new_value = ft_itoa(level);
 	if (!new_value)
 		return (0); // handle error
-	if((*env)->value)
+	if ((*env)->value)
 		free(((*env))->value);
 	(*env)->value = new_value;
 	return (1);
@@ -40,16 +40,16 @@ int update_SHLVL(t_env **env)
 
 int	set_next_var(t_env **next_envv, char *envv, char *equal)
 {
-	if(!envv)		//check if works with VAR=	  like an empty value
-		return(0);
+	if (!envv)		//check if works with VAR=	  like an empty value
+		return (0);
 	*next_envv = malloc(sizeof(t_env));
 	(*next_envv)->var = NULL;
 	(*next_envv)->value = NULL;
-	if(!*next_envv)
-		return(0);
+	if (!*next_envv)
+		return (0);
 	(*next_envv)->var = ft_substr(envv, 0, equal - envv);
 	if (!(*next_envv)->var )
-		return(0);
+		return (0);
 	(*next_envv)->value = ft_strdup(equal + 1);
 	if (ft_strcmp((*next_envv)->var, "SHLVL") == 0)
 		return (update_SHLVL(next_envv));	//update SHLVL if it is set
@@ -60,9 +60,9 @@ int	set_next_var(t_env **next_envv, char *envv, char *equal)
 	{
 		free((*next_envv)->var);
 		free(*next_envv);
-		return(0);					//handle errors
+		return (0);					//handle errors
 	}
-	return(1);
+	return (1);
 }
 
 t_env	*set_envp(t_env **minish_env, char **envp)
@@ -97,15 +97,15 @@ t_env	*set_envp(t_env **minish_env, char **envp)
 	if (current_envv)
 		current_envv->next = NULL;
 	// printf("[DEBUG] Environment setup completed.\n");
-	return(*minish_env);
+	return (*minish_env);
 }
 
 t_env *get_VAR(t_env **minish_envp, t_env **minish_local_var, char *VAR)
 {
 	t_env *travel_var;
 
-	if(!VAR)
-		return(NULL);
+	if (!VAR)
+		return (NULL);
 	travel_var = *minish_envp;
 	while (travel_var)
 	{
@@ -113,17 +113,17 @@ t_env *get_VAR(t_env **minish_envp, t_env **minish_local_var, char *VAR)
 			return travel_var;
 		travel_var = travel_var->next;
 	}
-	if(minish_local_var != NULL && *minish_local_var != NULL)
+	if (minish_local_var != NULL && *minish_local_var != NULL)
 	{
 		travel_var = *minish_local_var;
 		while (travel_var)
 		{
-			if(ft_strncmp((travel_var)->var, VAR, ft_strlen(travel_var->var)) == 0)
-				return(travel_var);
+			if (ft_strncmp((travel_var)->var, VAR, ft_strlen(travel_var->var)) == 0)
+				return (travel_var);
 			travel_var = travel_var->next;
 		}
 	}
-	return(NULL);
+	return (NULL);
 }
 // t_env	*set_envp(t_env **minish_env, char **envp)
 // {
@@ -135,22 +135,22 @@ t_env *get_VAR(t_env **minish_envp, t_env **minish_local_var, char *VAR)
 // 	i = 0;
 // 	current_env = NULL;
 // 	next_envv = NULL;
-// 	while(envp[i])
+// 	while (envp[i])
 // 	{
 // 		next_envv = malloc(sizeof(t_env));								//need to free at the end
-// 		if(!next_envv)
-// 			return(NULL);
+// 		if (!next_envv)
+// 			return (NULL);
 // 		equal_is_there = ft_strchr(envp[i], '=');
-// 		if(!equal_is_there)
+// 		if (!equal_is_there)
 // 		{
 // 			free(next_envv);
-// 			return(NULL);
+// 			return (NULL);
 // 		}
 // 		next_envv->VAR = ft_substr(envp[i], 0, equal_is_there - envp[i]);
 // 		next_envv->value = ft_strdup(equal_is_there + 1);
 // 		if (!next_envv->VAR || !next_envv->value)
-// 			return(NULL);					//handle errors
-// 		if(*minish_env == NULL)
+// 			return (NULL);					//handle errors
+// 		if (*minish_env == NULL)
 // 			*minish_env = next_envv;
 // 		else
 // 			current_env->next = next_envv;
@@ -158,6 +158,6 @@ t_env *get_VAR(t_env **minish_envp, t_env **minish_local_var, char *VAR)
 // 		i++;
 // 	}
 // 	current_env->next = NULL;
-// 	return(*minish_env);
+// 	return (*minish_env);
 // }
 

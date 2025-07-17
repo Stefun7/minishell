@@ -24,7 +24,7 @@ void	free_redirs(t_redir *redir, int count)
 
 	i = 0;
 	if (!redir)
-		return;
+		return ;
 	while (i < count)
 	{
 		free(redir[i].file_name);
@@ -52,7 +52,7 @@ void free_envp(t_env *env)
 {
 	t_env *next;
 
-	while(env)
+	while (env)
 	{
 		next = env->next;
 		free(env->var);
@@ -66,7 +66,7 @@ void free_array(char ***array)
 	int i;
 
 	if (!array || !*array)
-		return;
+		return ;
 	i = 0;
 	while ((*array)[i])
 	{

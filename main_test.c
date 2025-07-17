@@ -5,7 +5,7 @@ int main(int ac, char **av)
 {
     int i = 0;
     printf("ac : %d\n", ac);
-    while(av[i])
+    while (av[i])
     {
         printf("av[%d] : %s\n", i, av[i]);
         i++;
@@ -17,12 +17,12 @@ int main(int ac, char **av)
     // printf("res : %d\n", i);
     // int i = 0;
     // int k = 0;
-    // while(i < 5)
+    // while (i < 5)
     // {
     //     printf("i : %d\n", i);
     //     printf("k : %d\n", k);
     //     k++;
-    //     if(k == 2)
+    //     if (k == 2)
     //         continue;
     //     i++;
     // }

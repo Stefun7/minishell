@@ -14,7 +14,7 @@
 
 /*void	ft_toupperplusplus(unsigned int i, char *str)
 {
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] >= 97 && str[i] <= 122)
 			str[i] -= 32;
