@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:43 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/17 17:47:44 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/18 23:07:39 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	treat_input(t_minishell **minish, char *input)
 		return (1);
 	cmd_as_tokens = tokenizer(input);
 	if (!cmd_as_tokens)
-		return (free_commands(cmd_as_tokens), 0);
+		return (0);
 	(*minish)->number_of_commands = count_commands(cmd_as_tokens);
 	(*minish)->instru = init_insrtu((*minish), cmd_as_tokens);
 	free_commands(cmd_as_tokens);

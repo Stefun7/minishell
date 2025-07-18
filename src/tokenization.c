@@ -87,18 +87,24 @@ int tok_type_init(char *content, t_commands *commands, size_t index)
 	return (1);
 }
 
-void  linker(t_commands whole_commands, t_commands *current_command, size_t *whole_index)
+bool  linker(t_commands whole_commands, t_commands *current_command, size_t *whole_index)
 {
 	size_t curr_index;
 	size_t count;
 
+	if (!whole_commands.args || !current_command)
+		return ( false);
 	curr_index = 0;
 	count = count_next_tokens(whole_commands.args, *whole_index);
+	if (count == 0)
+		return ( false);
 	current_command->args = malloc(sizeof(t_token *) * (count + 1));
 	if (!current_command->args)
-		return ;  //malloc error
+		return (false);
 	while (curr_index < count)
 	{
+		if (!whole_commands.args[*whole_index])
+			return (free(current_command->args), current_command->args = NULL, false);
 		current_command->args[curr_index] = whole_commands.args[*whole_index];
 		curr_index++;
 		(*whole_index)++;
@@ -106,7 +112,7 @@ void  linker(t_commands whole_commands, t_commands *current_command, size_t *who
 	current_command->args[curr_index] = NULL;
 	if (whole_commands.args[*whole_index] && whole_commands.args[*whole_index]->type == PIPE)
 		(*whole_index)++;
-
+	return (true);
 }
 
 t_commands  *tokenizer(char *input)

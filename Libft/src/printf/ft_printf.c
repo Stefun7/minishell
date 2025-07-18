@@ -87,5 +87,5 @@ int	main(void)
 	printf("\n");
 	printf("%i",true_res);
 	printf(" : le vrai return");
-	return (0);
+	return(0);
 }*/

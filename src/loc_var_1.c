@@ -1,36 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   loc_var.c                                          :+:      :+:    :+:   */
+/*   loc_var_1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 18:14:58 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/17 18:18:57 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/18 23:19:03 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
-
-char	*valid_var_add(char *input)	//check if enough protection
-{
-	size_t	i;
-	char	*equal;
-
-	if (!input || input[0] == '=' || ft_isdigit(input[0]))
-		return (NULL);
-	equal = ft_strchr(input, '=');
-	if (!equal)
-		return (NULL);
-	i = 0;
-	while (input[i] && input[i] != '=')
-	{
-		if (!ft_isalnum(input[i]))
-			return (NULL);
-		i++;
-	}
-	return (equal);
-}
 
 int	update_val(t_env *next_var, char *after_equal, char *to_free)
 {
@@ -73,31 +53,27 @@ int	add_loc_var(t_env **minish_envp, t_env **minish_local_var, char *input)
 }
 
 char	*dollar_interrogation(t_minishell minishell, char *string,
-			size_t **str_ind, char *temp)
+							size_t **str_ind, char *temp)
 {
 	char	*exit_status_str;
 	char	*renew_str;
 
-	renew_str = ft_strdup("");
-	if (!renew_str)
-		return (NULL);
+	if (string[**str_ind] != '?')
+		return (temp);
 	exit_status_str = NULL;
-	if (string[**str_ind] == '?')
-	{
-		exit_status_str = ft_itoa(minishell.last_exit_status);
-		if (!exit_status_str)
-			return (NULL);
-		renew_str = ft_strjoin(temp, exit_status_str);
-		if (!renew_str)
-			return (free(exit_status_str), NULL);
-		free(exit_status_str);
-		(**str_ind)++;
-	}
+	exit_status_str = ft_itoa(minishell.last_exit_status);
+	if (!exit_status_str)
+		return (NULL);
+	renew_str = ft_strjoin(temp, exit_status_str);
+	if (!renew_str)
+		return (free(exit_status_str), NULL);
+	free(exit_status_str);
+	(**str_ind)++;
 	return (renew_str);
 }
 
 char	*replace_var(t_minishell minishell, char *string,
-			size_t *str_ind, char *temp)
+					size_t *str_ind, char *temp)
 {
 	size_t	len_var;
 	t_env	*actual_var;
@@ -106,11 +82,8 @@ char	*replace_var(t_minishell minishell, char *string,
 
 	len_var = 0;
 	(*str_ind)++;
-	renew_str = dollar_interrogation(minishell, string, &str_ind, temp);
-	if (renew_str == NULL)
-		return (NULL);
-	if (string[*str_ind - 1] == '?')
-		return (renew_str);
+	if (string[*str_ind] == '?')
+		return (dollar_interrogation(minishell, string, &str_ind, temp));
 	while (!is_env_char_end(string[*str_ind + len_var]))
 		len_var++;
 	pres_var = ft_substr(string, *str_ind, len_var);
@@ -121,9 +94,8 @@ char	*replace_var(t_minishell minishell, char *string,
 	if (actual_var)
 		renew_str = ft_strjoin(temp, actual_var->value);
 	else
-		return (temp);
-	free(temp);
-	return (renew_str);
+		renew_str = ft_strjoin(temp, "");
+	return (free(pres_var), renew_str);
 }
 
 char	*get_new_string(t_minishell minishell, char *string)
@@ -151,30 +123,4 @@ char	*get_new_string(t_minishell minishell, char *string)
 			return (NULL);
 	}
 	return (new_str);
-}
-
-int	var_already_there(t_env **minish_envp, t_env **minish_local_var, char *next_var)
-{
-	t_env	*travel_var;
-
-	travel_var = *minish_envp;
-	while (travel_var)
-	{
-		if (ft_strncmp((travel_var)->var, next_var,
-				ft_strlen(travel_var->var) == 0))
-			return (2);
-		travel_var = travel_var->next;
-	}
-	if (minish_local_var != NULL && *minish_local_var != NULL)
-	{
-		travel_var = *minish_local_var;
-		while (travel_var)
-		{
-			if (ft_strncmp((travel_var)->var, next_var,
-					ft_strlen(travel_var->var) == 0))
-				return (1);
-			travel_var = travel_var->next;
-		}
-	}
-	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:51:19 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/17 17:41:51 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/19 00:08:14 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,4 +200,13 @@ int ft_is_number(const char *str)
 		i++;
 	}
 	return (1);
+}
+
+size_t	len_spe_symb(char *input, size_t input_index)
+{
+	if (special_symb(input, input_index) == HEREDOC
+		|| special_symb(input, input_index) == APPEND)
+		return (2);
+	else
+		return (1);
 }

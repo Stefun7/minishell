@@ -43,5 +43,5 @@ void	ft_putnbr_fd(int nb, int fd)
 	int	fd = 2;
 
 	ft_putnbr_fd(i, fd);
-	return (0);
+	return(0);
 }*/

@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:59 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/17 17:43:50 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/18 23:50:45 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,24 @@ void	exit_shell(char *error_message, t_minishell **minish)
 	free_minish_total(minish);
 	write(2, error_message, ft_strlen(error_message));
 	exit(-1);
+}
+
+void	free_commands(t_commands *cmd)
+{
+	t_commands	*current;
+	t_commands	*next;
+
+	current = cmd;
+	while (current)
+	{
+		next = current->next_command;
+		// printf("free_commands: freeing as_str at %p\n", (void *)current->as_str);
+		free(current->as_str);
+		free_tokens(current->args);
+		// printf("free_commands: freeing command node at %p\n", (void *)current);
+		free(current);
+		current = next;
+	}
 }
 
 void	free_instructions(t_instructions *instru, int count)
@@ -47,17 +65,20 @@ void	free_instructions(t_instructions *instru, int count)
 	free(instru);
 }
 
-// void	free_minish_partial(t_minishell **minish)
-// {
-// 	if (!minish || !*minish)
-// 		return ;
-// 	if ((*minish)->parsed_string)
-// 		free((*minish)->parsed_string);
-// 	if ((*minish)->fd_pipes)
-// 		free((*minish)->fd_pipes);
-// 	if ((*minish)->instru)
-// 		free_instructions((*minish)->instru, (*minish)->number_of_commands);
-// }
+void	free_minish_partial(t_minishell **minish)
+{
+	if (!minish || !*minish)
+		return ;
+	if ((*minish)->parsed_string)
+		free((*minish)->parsed_string);
+	if ((*minish)->fd_pipes)
+		free((*minish)->fd_pipes);
+	if ((*minish)->instru)
+		free_instructions((*minish)->instru, (*minish)->number_of_commands);
+	(*minish)->instru = NULL;
+	(*minish)->number_of_commands = 0;
+	(*minish)->fd_pipes = NULL;
+}
 
 void	free_minish_total(t_minishell **minish)
 {

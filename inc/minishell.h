@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/17 17:38:21 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/19 00:08:27 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,8 +129,9 @@ t_commands		*create_command_list(t_commands whole);
 char			*fill_str(t_commands whole_commands,
 					t_commands *current_command, size_t whole_index);
 t_commands		*new_command_node(void);
-void			linker(t_commands whole_commands,
+bool			linker(t_commands whole_commands,
 					t_commands *current_command, size_t *whole_index);
+void			free_tokens_partial(t_token **tokens);
 
 //checker
 int				first_check(char *input);
@@ -149,6 +150,7 @@ void			free_tab(char **tab);
 char			*ft_strjoinchar(char *str, char c);
 int				count_redir(t_commands **cmd_as_token, t_token_type redir_type);
 int				ft_is_number(const char *str);
+size_t			len_spe_symb(char *input, size_t input_index);
 
 //init_env
 t_env			*set_envp(t_env **minish_env, char **envp);
@@ -171,7 +173,7 @@ bool			is_expandable_dollar(const char *string, int str_ind,
 					bool in_double);
 void			append_char(char **dest, char c);
 void			handle_single_quote(char **dest, const char *str, size_t *i);
-void			handle_expand(char **dest, t_minishell ms, const char *str,
+void			handle_expand(char **dest, t_minishell ms, char *str,
 					size_t *i);
 
 //init_instr
@@ -207,9 +209,9 @@ void			execute(t_minishell *minish, t_instructions *instr, int parser);
 void			close_parent(t_minishell *minish);
 void			close_stuff(t_minishell *minish, int parser);
 void			error(t_minishell *minish, char *reason, char *specific,
-					int exit_status);
+					int exit_stat);
 char			*path_finding(char *pathed, t_env **envp);
-void			Path_not_found(char *pcommand, t_minishell *minish);
+void			path_not_found(char *pcommand, t_minishell *minish);
 
 //access
 void			access_test(t_minishell *minish, t_instructions *instr,

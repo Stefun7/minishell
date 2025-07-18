@@ -91,7 +91,7 @@ char	*get_next_line(int fd)
 // 	char *str;
 //	 int fd = open("test.txt", O_RDONLY);
 //	 if (fd == -1)
-//		 return (1);
+//		 return(1);
 // 	str = get_next_line(fd);
 // 	while (str)
 // 	{
