@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:51:38 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/19 00:37:31 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/19 11:40:39 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,45 +59,81 @@ size_t	next_arg_len(char *input, size_t input_index)
 	return (len);
 }
 
-void	put_elem_in_quotes(char	**elem, char **input, size_t *input_index, size_t *elem_index, char *quote)
+int	put_elem_in_tab(char **tab, size_t tab_index, char *input, size_t *input_index)
 {
-	(*quote) = (*input)[*input_index];
-	(*elem)[(*elem_index)++] = *quote;
-	(*input_index)++;
-	while ((*input)[*input_index] && (*input)[*input_index] != *quote)
-		(*elem)[(*elem_index)++] = *input[(*input_index)++];
-	if ((*input)[*input_index] == *quote)
-	{
-		(*elem)[(*elem_index)++] = (*quote);
-		(*input_index)++;
-	}
-}
-
-int	put_elem_in_tab(char **tab, size_t tab_index, char *input,
-		size_t *input_index)
-{
-	char	*elem;
-	size_t	elem_size;
-	size_t	elem_index;
-	size_t	before_quote_index;
-	char	quote;
+	char *elem;
+	size_t elem_size;
+	size_t elem_index;
+	size_t before_quote_index;
+	char quote;
 
 	elem_index = 0;
 	elem_size = next_arg_len(input, *input_index) + 1;
 	elem = malloc(sizeof(char) * elem_size);
 	if (!elem)
-		return (0);		//malloc error
-	while (elem_index < elem_size - 1)
+		return(0);				 //need to handle malloc error
+	while(elem_index < elem_size - 1)
 	{
-		if (input[*input_index] == '\'' || input[*input_index] == '\"')
-			put_elem_in_quotes(&elem, &input, &input_index, &elem_index, &quote);
+		if(input[*input_index] == '\'' || input[*input_index] == '\"')
+		{
+			quote = input[*input_index];
+			elem[elem_index++] = quote;      //
+			(*input_index)++;
+			while(input[*input_index] && input[*input_index] != quote)
+				elem[elem_index++] = input[(*input_index)++];
+			if (input[*input_index] == quote)
+			{
+				elem[elem_index++] = quote;
+				(*input_index) ++;
+			}
+		}
 		else
 			elem[elem_index++] = input[(*input_index)++];
 	}
 	elem[elem_index] = '\0';
 	tab[tab_index] = elem;
-	return (1);
+	return(1);
 }
+
+// void	put_elem_in_quotes(char	**elem, char **input, size_t *input_index, size_t *elem_index, char *quote)
+// {
+// 	(*quote) = (*input)[*input_index];
+// 	(*elem)[(*elem_index)++] = *quote;
+// 	(*input_index)++;
+// 	while ((*input)[*input_index] && (*input)[*input_index] != *quote)
+// 		(*elem)[(*elem_index)++] = *input[(*input_index)++];
+// 	if ((*input)[*input_index] == *quote)
+// 	{
+// 		(*elem)[(*elem_index)++] = (*quote);
+// 		(*input_index)++;
+// 	}
+// }
+
+// int	put_elem_in_tab(char **tab, size_t tab_index, char *input,
+// 		size_t *input_index)
+// {
+// 	char	*elem;
+// 	size_t	elem_size;
+// 	size_t	elem_index;
+// 	size_t	before_quote_index;
+// 	char	quote;
+
+// 	elem_index = 0;
+// 	elem_size = next_arg_len(input, *input_index) + 1;
+// 	elem = malloc(sizeof(char) * elem_size);
+// 	if (!elem)
+// 		return (0);		//malloc error
+// 	while (elem_index < elem_size - 1)
+// 	{
+// 		if (input[*input_index] == '\'' || input[*input_index] == '\"')
+// 			put_elem_in_quotes(&elem, &input, input_index, &elem_index, &quote);
+// 		else
+// 			elem[elem_index++] = input[(*input_index)++];
+// 	}
+// 	elem[elem_index] = '\0';
+// 	tab[tab_index] = elem;
+// 	return (1);
+// }
 
 size_t	nbr_of_elem(char *input)
 {
