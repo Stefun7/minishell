@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/19 00:08:27 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/22 17:16:11 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,7 @@ void			free_tokens_partial(t_token **tokens);
 
 //checker
 int				first_check(char *input);
-int				second_check(t_commands whole_commands);
+int				second_check(t_commands *command);
 int				redir_check(t_token *current, t_token *next);
 int				pipe_check(t_token *current, t_token *next);
 int				special_symb(char *input, size_t index);
@@ -151,6 +151,7 @@ char			*ft_strjoinchar(char *str, char c);
 int				count_redir(t_commands **cmd_as_token, t_token_type redir_type);
 int				ft_is_number(const char *str);
 size_t			len_spe_symb(char *input, size_t input_index);
+bool			empty_input(char *input);
 
 //init_env
 t_env			*set_envp(t_env **minish_env, char **envp);

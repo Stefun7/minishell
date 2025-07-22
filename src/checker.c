@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 17:41:28 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/17 18:04:48 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/22 17:15:14 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,25 @@ int	first_check(char *input)
 // 	index ++;
 // }
 
-int	second_check(t_commands whole_commands)
+int	second_check(t_commands *command)
 {
 	size_t	index;
 	t_token	*next;
 
-	index = 0;
 	next = NULL;
-	while (whole_commands.args[index])
+	while(command)
 	{
-		next = whole_commands.args[index + 1];
-		if (!redir_check(whole_commands.args[index], next))
-			return (0);
-		if (!pipe_check(whole_commands.args[index], next))
-			return (0);
-		index ++;
+		index = 0;
+		while (command->args[index])
+		{
+			next = command->args[index + 1];
+			if (!redir_check(command->args[index], next))
+				return (0);
+			if (!pipe_check(command->args[index], next))
+				return (0);
+			index ++;
+		}
+		command = command->next_command;
 	}
 	return (1);
 }

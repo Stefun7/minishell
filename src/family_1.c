@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:33:53 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/18 23:41:02 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/22 17:26:18 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	run(t_minishell *minish)
 	int	i;
 
 	i = 0;
+
 	if (built_in_parent(minish->instru[0].exec[0])
 		&& minish->number_of_commands == 1)
 		minish->last_exit_status = exec_builtin(minish->instru[0].exec, minish);

@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:43 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/18 23:07:39 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/22 17:38:43 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@ int	treat_input(t_minishell **minish, char *input)
 {
 	t_commands	*cmd_as_tokens;
 
-	if (!input || *input == '\0')
+	if (empty_input(input))
 		return (1);
 	if (!first_check(input))
-		return ((*minish)->last_exit_status = 2, 3);
+		return ((*minish)->last_exit_status = 2, 3);			//still have to return 3 ?
 	if (add_loc_var(&(*minish)->envp, &(*minish)->local_var, input))
 		return (1);
 	cmd_as_tokens = tokenizer(input);
 	if (!cmd_as_tokens)
 		return (0);
+	if (!second_check(cmd_as_tokens))
+		return(3);								//still have to change the 3 ?
 	(*minish)->number_of_commands = count_commands(cmd_as_tokens);
 	(*minish)->instru = init_insrtu((*minish), cmd_as_tokens);
 	free_commands(cmd_as_tokens);
@@ -35,6 +37,7 @@ int	treat_input(t_minishell **minish, char *input)
 	if (!(*minish)->fd_pipes)
 		return (0);
 	run(*minish);
+	// printf("top\n");
 	return (1);
 }
 
@@ -79,7 +82,10 @@ int	main(int ac, char **av, char **envp)
 		enable_echoctl();
 		free(prompt);
 		if (!input)
+		{
+			printf("exit\n");
 			break ;
+		}
 		if (input && *input)
 			add_history(input);
 		if (treat_input(&minish, input) == 0)

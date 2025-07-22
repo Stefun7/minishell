@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:51:38 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/19 11:40:39 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/22 17:32:31 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ size_t	next_arg_len(char *input, size_t input_index)
 		{
 			len += (end_quotes (input, &index));
 		}
-		else if (input[index] == ' ' || (special_symb(input, index) != NONE))
+		else if (input[index] == ' ' || input[index] == '	' || (special_symb(input, index) != NONE))
 			break ;
 		else
 		{
@@ -144,7 +144,7 @@ size_t	nbr_of_elem(char *input)
 	nbr = 0;
 	while (input[index])
 	{
-		while (input[index] == ' ')
+		while (input[index] == ' ' || input[index] == '	')
 			index++;
 		if (special_symb(input, index) != NONE)
 		{
@@ -155,7 +155,7 @@ size_t	nbr_of_elem(char *input)
 		}
 		else
 		{
-			while (input[index] && input[index] != ' ' && special_symb(input, index) == NONE)
+			while (input[index] && input[index] != ' ' && input[index] != '	' && special_symb(input, index) == NONE)
 			{
 				if (input[index] == '\'' || input[index] == '\"')
 				{
@@ -165,9 +165,8 @@ size_t	nbr_of_elem(char *input)
 					index++;
 			}
 		}
-		if (input[index] || (index > 0 && input[index - 1] != ' ')) //checks if the line finishes with spaces or if we reached the end
+		if (input[index] || (index > 0 && input[index - 1] != ' ') || (index > 0 && input[index - 1] != '	')) //checks if the line finishes with spaces or if we reached the end
 			nbr++;
-		// printf("nbr : %lu\n", nbr);
 	}
 	// exit(1);
 	return (nbr);
@@ -190,7 +189,7 @@ char **ft_split_shell(char *input)
 		return (NULL);				 //malloc error
 	while (tab_index < tab_size - 1)
 	{
-		while (input[input_index] == ' ')
+		while (input[input_index] == ' ' || input[input_index] == '	')
 			input_index++;
 		if (input[input_index] != '\0')
 		{
@@ -203,6 +202,5 @@ char **ft_split_shell(char *input)
 		tab_index++;
 	}
 	tab_of_elem[tab_index] = NULL;
-
 	return (tab_of_elem);
 }

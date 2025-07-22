@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:51:19 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/19 00:08:14 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/22 16:38:34 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,4 +209,20 @@ size_t	len_spe_symb(char *input, size_t input_index)
 		return (2);
 	else
 		return (1);
+}
+
+bool	empty_input(char *input)
+{
+	size_t	index;
+
+	index = 0;
+	if(!input || *input == '\0')
+		return(true);
+	while (input[index])
+	{
+		if (input[index] != ' ' && input[index] != '	')
+			return (false);
+		index ++;
+	}
+	return(true);
 }

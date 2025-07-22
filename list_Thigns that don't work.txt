@@ -39,3 +39,9 @@ double free issues with
 ==13132==    by 0x10D1FA: init_insrtu (in /home/samuel/stef_minish/minish_MERGER/minishell)
 ==13132==    by 0x10DD25: treat_input (in /home/samuel/stef_minish/minish_MERGER/minishell)
 ==13132==    by 0x10E014: main (in /home/samuel/stef_minish/minish_MERGER/minishell)
+
+in tiny.c, should we also care about the tab ? like '	'
+
+cat echo < ls doesn't print correctly the error
+
+>file1 segfault.....

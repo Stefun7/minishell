@@ -136,13 +136,13 @@ int set_redir(t_instructions *instr, t_commands *cmd)
 		return (0);
 	while (cmd->args[index])
 	{
-		if (cmd->args[index]->type == REDIR_IN || cmd->args[index]->type == HEREDOC)
+		if ((cmd->args[index]->type == REDIR_IN || cmd->args[index]->type == HEREDOC) && cmd->args[index + 1] != NULL)
 		{
 			if (!add_redir(instr->in_redir, cmd->args[index]->type, cmd->args[index + 1]->content, &in_index))
 				return (0);
 			index += 2;
 		}
-		else if (cmd->args[index]->type == REDIR_OUT || cmd->args[index]->type == APPEND)
+		else if ((cmd->args[index]->type == REDIR_OUT || cmd->args[index]->type == APPEND) && cmd->args[index + 1] != NULL)
 		{
 			if (!add_redir(instr->out_redir, cmd->args[index]->type, cmd->args[index + 1]->content, &out_index))
 				return (0);
@@ -175,8 +175,13 @@ t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens)
 		instru[index].exec = tok_into_tab(minish, cmd_as_tokens->args);
 		if (!instru[index].exec)
 			return (NULL);			//malloc error
-		// printf("init_instr: command = %s\n", instru[index].exec[0]);
-		// printf("init_instr: command = %s\n", cmd_as_tokens->as_str);
+		int i = 0;
+		// while(instru[index].exec[i])
+		// {
+		// 	printf("elem : %s\n", instru[index].exec[i]);
+		// 	i++;
+		// }
+		// printf(command : %s\n", cmd_as_tokens->as_str);
 		cmd_as_tokens = cmd_as_tokens->next_command;
 		index ++;
 	}

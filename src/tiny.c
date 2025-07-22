@@ -2,7 +2,7 @@
 #include "../inc/minishell.h"
 
 
-bool	is_env_char_end(char c)
+bool	is_env_char_end(char c)	//do we have to include the tab ?
 {
 	return (
 		c == ' '  ||

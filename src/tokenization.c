@@ -142,8 +142,7 @@ t_commands  *tokenizer(char *input)
 	}
 	// write(2, "tokenizer 2\n", 13);
 	whole_commands.args[tab_index] = NULL;
-	if (!second_check(whole_commands)) //second chek at whole_command, so we still have pipes
-		return (free_tokens(whole_commands.args), free_tab(tab_input), NULL); //handle errors
+	int i = 0;
 	first = create_command_list(whole_commands);
 	// write(2, "tokenizer 3\n", 13);
 	// printf("tokenizer: first command as_str = %s\n", first->as_str);
