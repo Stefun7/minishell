@@ -1,24 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tiny.c                                             :+:      :+:    :+:   */
+/*   builtins_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/23 20:12:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/23 20:15:20 by scesar           ###   ########.fr       */
+/*   Created: 2025/07/23 20:46:12 by scesar            #+#    #+#             */
+/*   Updated: 2025/07/23 20:46:24 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-bool	is_env_char_end(char c)	//do we have to include the tab ?
-{
-	return (c == ' ' || c == '\"' || c == '$' || c == '>' || c == '<'
-		|| c == '\'' || c == '|' || c == '\0');
-}
 
-bool	is_executable_token(t_token_type type)
-{
-	return (type == CMD || type == ARG || type == FLAG);
-}

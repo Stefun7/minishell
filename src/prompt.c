@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 17:45:41 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/17 17:39:51 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:39:58 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*get_curr_path(t_env **envp)
 	char	*home;
 	char	*temp;
 
-	home = get_VAR(envp, NULL, "HOME")->value;
+	home = get_var(envp, NULL, "HOME")->value;
 	if (!home)
 		return (NULL);
 	if (!getcwd(cwd, sizeof(cwd)))
@@ -46,7 +46,7 @@ char	*get_prompt(t_env **envp)
 	char	*temp;
 	char	*path;
 
-	user_var = get_VAR(envp, NULL, "USER");
+	user_var = get_var(envp, NULL, "USER");
 	if (!user_var || !user_var->value)
 		user = ft_strdup("user :");
 	else

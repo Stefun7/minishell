@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:43 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/22 17:38:43 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:39:58 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	treat_input(t_minishell **minish, char *input)
 	if (!(*minish)->fd_pipes)
 		return (0);
 	run(*minish);
-	// printf("top\n");
 	return (1);
 }
 
@@ -46,7 +45,7 @@ void	init_minish(t_minishell **minish, char **envp)
 	char	*shlvl[3];
 
 	shlvl[0] = "export";
-	shlvl[1] = "SHLVL=1";
+	shlvl[1] = "shlvl=1";
 	shlvl[2] = NULL;
 	(*minish) = malloc(1 * sizeof(t_minishell));
 	if (!(*minish))
@@ -60,8 +59,9 @@ void	init_minish(t_minishell **minish, char **envp)
 	(*minish)->last_exit_status = 0;
 	if (!set_envp(&(*minish)->envp, envp))
 		exit_shell("Something went wrong while setting env\n", minish);
-	if (get_VAR(&(*minish)->envp, &(*minish)->local_var, "SHLVL") == NULL)
+	if (get_var(&(*minish)->envp, &(*minish)->local_var, "shlvl") == NULL)
 		exec_builtin(shlvl, (*minish));
+	setup_signals();
 }
 
 int	main(int ac, char **av, char **envp)
@@ -72,7 +72,6 @@ int	main(int ac, char **av, char **envp)
 	int				input_res;
 
 	init_minish(&minish, envp);
-	setup_signals();
 	while (1)
 	{
 		prompt = get_prompt(&minish->envp);
@@ -82,10 +81,7 @@ int	main(int ac, char **av, char **envp)
 		enable_echoctl();
 		free(prompt);
 		if (!input)
-		{
-			printf("exit\n");
 			break ;
-		}
 		if (input && *input)
 			add_history(input);
 		if (treat_input(&minish, input) == 0)
@@ -93,5 +89,6 @@ int	main(int ac, char **av, char **envp)
 		free(input);
 	}
 	free_minish_total(&minish);
+	printf("exit\n");
 	return (0);
 }

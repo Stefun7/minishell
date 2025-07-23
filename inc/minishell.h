@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/22 17:16:11 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:41:46 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,8 +159,9 @@ int				set_next_var(t_env **next_envv, char *envv, char *equal);
 int				var_already_there(t_env **minish_envp, t_env **minish_local_var,
 					char *next_var);
 char			*valid_var_add(char *input);
-t_env			*get_VAR(t_env **minish_envp, t_env **minish_local_var,
+t_env			*get_var(t_env **minish_envp, t_env **minish_local_var,
 					char *VAR);
+void			init_env_var(size_t *i, t_env *current_envv, t_env *next_envv);
 
 //loc_var
 char			*fill_renew_str(char *last_str, size_t last_str_ind,
@@ -260,7 +261,7 @@ char			*get_path(char *command_to_path, char *paths, int index);
 int				path_len(char *string, int index);
 void			putcommand(char *command_to_path, char *potential_path,
 					int size);
-int				update_SHLVL(t_env **next_envv);
+int				update_shlvl(t_env **next_envv);
 
 //////signal
 void			setup_signals(void);

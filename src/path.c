@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:01:27 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/17 17:49:24 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:39:58 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*path_finding(char *pathed, t_env **envp)
 		else
 			return (NULL);
 	}
-	path = get_VAR(envp, NULL, "PATH");
+	path = get_var(envp, NULL, "PATH");
 	if (path == NULL)
 		return (NULL);		//not sure we need to protect here
 	// ft_putnbr_fd(path, 2);

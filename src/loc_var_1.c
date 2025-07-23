@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 18:14:58 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/18 23:19:03 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/23 20:39:58 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	add_loc_var(t_env **minish_envp, t_env **minish_local_var, char *input)
 	pres_var = ft_substr(input, 0, equal - input);
 	if (!equal || !pres_var)
 		return (0);
-	next_var = get_VAR(minish_envp, minish_local_var, pres_var);
+	next_var = get_var(minish_envp, minish_local_var, pres_var);
 	if (next_var != NULL)
 		return (update_val(next_var, equal + 1, pres_var));
 	set_next_var(&next_var, input, equal);
@@ -90,7 +90,7 @@ char	*replace_var(t_minishell minishell, char *string,
 	if (!pres_var)
 		return (NULL);
 	(*str_ind) += len_var;
-	actual_var = get_VAR(&minishell.envp, &minishell.local_var, pres_var);
+	actual_var = get_var(&minishell.envp, &minishell.local_var, pres_var);
 	if (actual_var)
 		renew_str = ft_strjoin(temp, actual_var->value);
 	else

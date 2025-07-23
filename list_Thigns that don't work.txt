@@ -12,7 +12,7 @@ maybe we should print an exit message when Ctrl D
 see if we look for the extra check I left in comment in checker.c => first_check. I can't manage to trigger it
 
 change message in family.c line 28
-check what happens when putting tab in terminal instead of space, and mixed
+check what happens when putting tab in terminal instead of space, and mixed ==>updated, works great now
 
 left printf in free'...'.c in comments
 

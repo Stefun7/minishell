@@ -1,9 +1,20 @@
-#include "../inc/minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_1.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/23 20:42:17 by scesar            #+#    #+#             */
+/*   Updated: 2025/07/23 20:47:02 by scesar           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "../inc/minishell.h"
 
 int	is_n_flag(const char *str)
 {
-	int i;
+	int	i;
 
 	if (!str || str[0] != '-')
 		return (0);
@@ -21,7 +32,7 @@ int	is_n_flag(const char *str)
 
 int	check_n_flags(char **argv)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (argv[i] != NULL)
@@ -33,31 +44,23 @@ int	check_n_flags(char **argv)
 	}
 	return (i);
 }
-int is_builtin(char *cmd)
+
+int	is_builtin(char *cmd)
 {
-	return
-	(
-		ft_strcmp(cmd, "echo") == 0 ||	  //try with smth like echooo, or cd12,...
-		ft_strcmp(cmd, "cd") == 0 ||
-		ft_strcmp(cmd, "pwd") == 0 ||
-		ft_strcmp(cmd, "export") == 0 ||
-		ft_strcmp(cmd, "unset") == 0 ||
-		ft_strcmp(cmd, "env") == 0 ||
-		ft_strcmp(cmd, "exit") == 0
-	);
+	return (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0
+		|| ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0
+		|| ft_strcmp(cmd, "exit") == 0);
 }
 
-int built_in_parent(char *cmd)
+int	built_in_parent(char *cmd)
 {
-	return
-	(
-		ft_strcmp(cmd, "cd") == 0 ||
-		ft_strcmp(cmd, "export") == 0 ||
-		ft_strcmp(cmd, "unset") == 0 ||
-		ft_strcmp(cmd, "exit") == 0
-	);
+	return (ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0
+		|| ft_strcmp(cmd, "exit") == 0);
 }
-int builtin_env(t_env *envp)
+
+int	builtin_env(t_env *envp)
 {
 	while (envp != NULL)
 	{
@@ -67,33 +70,33 @@ int builtin_env(t_env *envp)
 	}
 	return (0);
 }
-int exec_builtin(char **exec, t_minishell *shell)
+
+int	exec_builtin(char **exec, t_minishell *shell)
 {
 	if (!is_builtin(exec[0]))
 		return (-1);
-
 	if (ft_strcmp(exec[0], "echo") == 0)
-		return builtin_echo(exec);
+		return (builtin_echo(exec));
 	if (ft_strcmp(exec[0], "pwd") == 0)
-		return builtin_pwd();
+		return (builtin_pwd());
 	if (ft_strcmp(exec[0], "exit") == 0)
 		builtin_exit(exec);
 	if (ft_strcmp(exec[0], "unset") == 0)
-		return builtin_unset(exec, &shell->envp);
+		return (builtin_unset(exec, &shell->envp));
 	if (ft_strcmp(exec[0], "cd") == 0)
-		return builtin_cd(exec, shell);
+		return (builtin_cd(exec, shell));
 	if (ft_strcmp(exec[0], "env") == 0)
-		return builtin_env(shell->envp);
+		return (builtin_env(shell->envp));
 	if (ft_strcmp(exec[0], "export") == 0)
-		return builtin_export(exec, shell);
-
+		return (builtin_export(exec, shell));
 	return (-1);
 }
+
 int builtin_echo(char **executables)
 {
-	int i;
-	int j;
-	int newline;
+	int	i;
+	int	j;
+	int	newline;
 
 	i = 1;
 	j = 1;
@@ -113,14 +116,14 @@ int builtin_echo(char **executables)
 	return (0);
 }
 
-int builtin_cd(char **executables, t_minishell *minish)
+int	builtin_cd(char **executables, t_minishell *minish)
 {
-	t_env *home_var;
-	char *path;
+	t_env	*home_var;
+	char	*path;
 
 	if (!executables[1])
 	{
-		home_var = get_VAR(&minish->envp, NULL, "HOME");
+		home_var = get_var(&minish->envp, NULL, "HOME");
 		if (home_var == NULL)
 		{
 			write(2, "bash: cd: HOME not set\n", 23);
@@ -129,7 +132,7 @@ int builtin_cd(char **executables, t_minishell *minish)
 		else if (chdir(home_var->value) != 0)
 		{
 			perror("cd");
-			return 1;
+			return (1);
 		}
 	}
 	else
@@ -140,13 +143,14 @@ int builtin_cd(char **executables, t_minishell *minish)
 		else if (chdir(path) != 0)
 		{
 			perror("cd");
-			return 1;
+			return (1);
 		}
 		else
-			return 0;
+			return (0);
 	}
-	return 1;
+	return (1);
 }
+
 int builtin_pwd(void)
 {
 	char cwd[500];
@@ -202,7 +206,7 @@ int edit_env(char *content, t_minishell *minish)
 		if (value == NULL)
 			return (free(value), -1);
 		remove_env_var(&minish->envp, var);
-		if (get_VAR(&minish->local_var, NULL, var) != NULL)
+		if (get_var(&minish->local_var, NULL, var) != NULL)
 			update_env_value(minish->envp, var, value);
 		add_env_back(&minish->envp, var, value);
 		free(var);
@@ -248,7 +252,7 @@ int is_valid_identifier(const char *str)
 			}
 			else if (ft_strchr(executables[index], '=') != NULL)
 				edit_env(executables[index], minish);
-			else if (get_VAR(&minish->envp, NULL, executables[index]) == NULL)
+			else if (get_var(&minish->envp, NULL, executables[index]) == NULL)
 				add_env_back(&minish->envp, executables[index], "");
 			index++;
 		}
