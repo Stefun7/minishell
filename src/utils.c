@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:51:19 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 10:30:08 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 17:02:04 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,11 @@ size_t	ft_countchar(char *str, char to_count)
 	return (res);
 }
 
-size_t tab_size(char **tab)
+size_t	tab_size(char **tab)
 {
-	size_t index;
+	size_t	index;
 
 	index = 0;
-
 	while (tab[index])
 		index++;
 	return (index);
@@ -131,6 +130,8 @@ int special_symb_2(char *input)
 	else
 		return (NONE);
 }
+
+
 
 char *ft_strjoinchar(char *str, char c)
 {
@@ -231,4 +232,33 @@ void putstr_bsn(char *str, int fd, bool bsn)
 	write(fd, str, ft_strlen(str));
 	if (bsn == YES)
 		write (fd, "\n", 1);
+}
+
+int	end_spaces(char *input, size_t *index)
+{
+	while (input[*index] == ' ' || input[*index] == '	')
+		(*index)++;
+	if (!input[*index])
+		return (0);
+	return (1);
+}
+
+size_t	end_quotes(char *input, size_t *index)
+{
+	char	quote;
+	size_t	size;
+
+	size = 0;
+	quote = input[*index];
+	(*index)++;
+	while (input[*index] && input[*index] != quote)
+	{
+		size++;
+		(*index)++;
+	}
+	if (input[*index] != quote)
+		return (0);
+	if (input[*index] == quote)
+		(*index)++;
+	return (size + 2);
 }

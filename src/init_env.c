@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 20:16:35 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/23 20:40:55 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 15:07:27 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,29 +97,15 @@ t_env	*set_envp(t_env **minish_env, char **envp)
 	return (*minish_env);
 }
 
-t_env	*get_var(t_env **minish_envp, t_env **minish_local_var, char *VAR)
+t_env	*create_env_node(char *var, char *value)
 {
-	t_env	*travel_var;
+	t_env	*new;
 
-	if (!VAR)
+	new = malloc(sizeof(t_env));
+	if (!new)
 		return (NULL);
-	travel_var = *minish_envp;
-	while (travel_var)
-	{
-		if (ft_strcmp(travel_var->var, VAR) == 0)
-			return (travel_var);
-		travel_var = travel_var->next;
-	}
-	if (minish_local_var != NULL && *minish_local_var != NULL)
-	{
-		travel_var = *minish_local_var;
-		while (travel_var)
-		{
-			if (ft_strncmp((travel_var)->var, VAR,
-					ft_strlen(travel_var->var)) == 0)
-				return (travel_var);
-			travel_var = travel_var->next;
-		}
-	}
-	return (NULL);
+	new->var = strdup(var);
+	new->value = strdup(value);
+	new->next = NULL;
+	return (new);
 }

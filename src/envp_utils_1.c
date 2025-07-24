@@ -1,54 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envp_utils.c                                       :+:      :+:    :+:   */
+/*   envp_utils_1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 10:22:47 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 10:23:07 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 15:09:40 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	env_list_length(t_env *traveler)
-{
-		int count = 0;
-
-    while (traveler != NULL)
-    {
-        count++;
-        traveler = traveler->next;
-    }
-    return count;
-}
-int	remove_env_var(t_env **head, const char *var)
-{
-	t_env	*current;
-	t_env	*prev;
-
-	current = *head;
-	prev = NULL;
-	while (current)
-	{
-		if (ft_strcmp(current->var, var) == 0)
-		{
-			if (prev)
-				prev->next = current->next;
-			else
-				*head = current->next;
-			free(current->var);
-			free(current->value);
-			free(current);
-			return (1);
-		}
-		prev = current;
-		current = current->next;
-	}
-	return (0);
-}
-t_env *find_first(t_env *envp)
+t_env	*find_first(t_env *envp)
 
 {
 	t_env	*min;
@@ -68,9 +32,9 @@ t_env *find_first(t_env *envp)
 		}
 		envp = envp->next;
 	}
-
 	return (min);
 }
+
 int	is_between_env(t_env *envp, t_env *smallest, t_env *bigger)
 {
 	int	cmp_small;
@@ -93,18 +57,6 @@ int	is_between_env(t_env *envp, t_env *smallest, t_env *bigger)
 			return (0);
 	}
 	return (-1);
-}
-t_env	*create_env_node(char *var, char *value)
-{
-	t_env	*new;
-
-	new = malloc(sizeof(t_env));
-	if (!new)
-		return (NULL);
-	new->var = strdup(var);
-	new->value = strdup(value);
-	new->next = NULL;
-	return (new);
 }
 
 int	add_env_back(t_env **env_list, char *var, char *value)
@@ -129,26 +81,6 @@ int	add_env_back(t_env **env_list, char *var, char *value)
 	return (0);
 }
 
-int update_env_value(t_env *env_list, const char *var_name, const char *new_value)
-{
-    t_env *current;
-
-	current = env_list;
-    while (current)
-    {
-        if (ft_strcmp(current->var, var_name) == 0)
-        {
-            if (current->value)
-                free(current->value);
-            current->value = ft_strdup(new_value);
-            if (current->value == NULL)
-				return -1; // Memory allocation failed
-			return 0; // Successfully updated the value
-        }
-        current = current->next;
-    }
-	return 1;
-}
 char	**env_list_to_array(t_env *env, int len)
 {
 	char	**env_array;
@@ -174,10 +106,11 @@ char	**env_list_to_array(t_env *env, int len)
 	env_array[i] = NULL;
 	return (env_array);
 }
-char *join_var_value(char *var, char *value)
+
+char	*join_var_value(char *var, char *value)
 {
-	char *result;
-	size_t len;
+	char	*result;
+	size_t	len;
 
 	len = ft_strlen(var) + 1 + ft_strlen(value) + 1;
 	result = malloc(sizeof(char) * len);

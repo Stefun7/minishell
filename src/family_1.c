@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:33:53 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/22 17:26:18 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 15:10:46 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	run(t_minishell *minish)
 	int	i;
 
 	i = 0;
-
 	if (built_in_parent(minish->instru[0].exec[0])
 		&& minish->number_of_commands == 1)
 		minish->last_exit_status = exec_builtin(minish->instru[0].exec, minish);
@@ -111,17 +110,4 @@ void	child_process(t_minishell *minish, t_instructions *instr, int parser)
 		execute(minish, instr, parser);
 	close_stuff(minish, parser);
 	exit(0);
-}
-/////// delete at the end
-void	print_env_array(char **envp)
-{
-	int	i;
-
-	i = 0;
-	printf("\n printing the ARRAY:\n");
-	while (envp[i])
-	{
-		printf("  [%d]: %s\n", i, envp[i]);
-		i++;
-	}
 }

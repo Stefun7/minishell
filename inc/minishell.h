@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 10:20:37 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 16:38:07 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ char			**ft_split_shell(char *input);
 size_t			nbr_of_elem(char *input);
 int				put_elem_in_tab(char **tab, size_t tab_index, char *input,
 					size_t *input_index);
+void			put_elem_in_quotes(char	**elem, char **input,
+					size_t *input_index, size_t *elem_index);
 size_t			next_arg_len(char *input, size_t index);
 size_t			end_quotes(char *input, size_t *index);
 
@@ -156,6 +158,7 @@ int				ft_is_number(const char *str);
 size_t			len_spe_symb(char *input, size_t input_index);
 bool			empty_input(char *input);
 void			putstr_bsn(char *str, int fd, bool bsn);
+int				end_spaces(char *input, size_t *index);
 
 //init_env
 t_env			*set_envp(t_env **minish_env, char **envp);
