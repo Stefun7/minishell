@@ -3,16 +3,9 @@
 
 init_env.c : l 54-55
 
-
-left your comments in SAM_signals.c out of the fct for norminette, see if you still need it or not
-in SAM_signals also, global var must start with g_ for the norminette but when doing so, I can't compile... Do you know what the issue is ?
-
-maybe we should print an exit message when Ctrl D
-
 see if we look for the extra check I left in comment in checker.c => first_check. I can't manage to trigger it
 
 change message in family.c line 28
-check what happens when putting tab in terminal instead of space, and mixed ==>updated, works great now
 
 left printf in free'...'.c in comments
 
@@ -40,8 +33,11 @@ double free issues with
 ==13132==    by 0x10DD25: treat_input (in /home/samuel/stef_minish/minish_MERGER/minishell)
 ==13132==    by 0x10E014: main (in /home/samuel/stef_minish/minish_MERGER/minishell)
 
-in tiny.c, should we also care about the tab ? like '	'
+- left your comments in SAM_signals.c out of the fct for norminette, see if you still need it or not
+- in SAM_signals also, global var must start with g_ for the norminette but when doing so, I can't compile... Do you know what the issue is ?
 
-cat echo < ls doesn't print correctly the error
+- in tiny.c, should we also care about the tab ? like '	'
 
->file1 segfault.....
+- echo < MAKEFILE doesn't print correctly the error ==> corrected behavior by putting echo in builtin_parents... Can I ?
+
+- >file1 segfault..... same with <file1 bc minish->instr[i].exec is not set during tok_into_tab, so when trying to dereferencing it causes crash

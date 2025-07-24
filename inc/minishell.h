@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/23 20:41:46 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 10:20:37 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,9 @@ int				put_elem_in_tab(char **tab, size_t tab_index, char *input,
 size_t			next_arg_len(char *input, size_t index);
 size_t			end_quotes(char *input, size_t *index);
 
+bool			is_expandable_dollar(const char *string, int str_ind,
+					bool in_double);
+
 //tokenizer
 int				tok_type_init(char *content, t_commands *commands,
 					size_t index);
@@ -152,6 +155,7 @@ int				count_redir(t_commands **cmd_as_token, t_token_type redir_type);
 int				ft_is_number(const char *str);
 size_t			len_spe_symb(char *input, size_t input_index);
 bool			empty_input(char *input);
+void			putstr_bsn(char *str, int fd, bool bsn);
 
 //init_env
 t_env			*set_envp(t_env **minish_env, char **envp);

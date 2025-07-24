@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:51:19 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/22 16:38:34 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 10:30:08 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void	run_command(char **tab_input)
 {
-	pid_t   pid;
-	int status;
+	pid_t	pid;
+	int		status;
 
 	if (!tab_input || !tab_input[0])
 		return ;
@@ -37,13 +37,12 @@ void	run_command(char **tab_input)
 		waitpid(pid, &status, 0);
 }
 
-char *ft_delchar(char *str, char to_del)
+char	*ft_delchar(char *str, char to_del)
 {
-	//need to free str after (using a temp before calling fct)
-	size_t index;
-	size_t index_res;
-	size_t new_size;
-	char *res;
+	size_t	index;
+	size_t	index_res;
+	size_t	new_size;
+	char	*res;
 
 	index = 0;
 	index_res = 0;
@@ -64,10 +63,10 @@ char *ft_delchar(char *str, char to_del)
 	return (res);
 }
 
-size_t ft_countchar(char *str, char to_count)
+size_t	ft_countchar(char *str, char to_count)
 {
-	size_t res;
-	size_t index;
+	size_t	res;
+	size_t	index;
 
 	res = 0;
 	index = 0;
@@ -225,4 +224,11 @@ bool	empty_input(char *input)
 		index ++;
 	}
 	return(true);
+}
+
+void putstr_bsn(char *str, int fd, bool bsn)
+{
+	write(fd, str, ft_strlen(str));
+	if (bsn == YES)
+		write (fd, "\n", 1);
 }

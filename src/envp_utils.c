@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envp_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/24 10:22:47 by scesar            #+#    #+#             */
+/*   Updated: 2025/07/24 10:23:07 by scesar           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
 
-int env_list_length(t_env *traveler)
+int	env_list_length(t_env *traveler)
 {
-    int count = 0;
+		int count = 0;
 
     while (traveler != NULL)
     {

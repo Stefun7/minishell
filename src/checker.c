@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 17:41:28 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/22 17:15:14 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 10:18:48 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,6 @@ int	first_check(char *input)
 	}
 	return (1);
 }
-// while (input[index])
-// {
-// 	if ((unsigned char)input[index] < 32 && input[index] != '\t'
-// 		&& input[index] != '\n')
-// 	{
-// 		ft_printf("Syntax error: Unescaped character: ASCII %d\n",
-// 			input[index]);
-// 		return (0);
-// 	}
-// 	index ++;
-// }
 
 int	second_check(t_commands *command)
 {
@@ -67,7 +56,7 @@ int	second_check(t_commands *command)
 	t_token	*next;
 
 	next = NULL;
-	while(command)
+	while (command)
 	{
 		index = 0;
 		while (command->args[index])
