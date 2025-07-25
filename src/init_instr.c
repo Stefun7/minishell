@@ -1,50 +1,21 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   init_instr.c									   :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: scesar <scesar@student.42.fr>			  +#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/06/20 20:06:44 by scesar			#+#	#+#			 */
-/*   Updated: 2025/06/25 12:13:34 by scesar		   ###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_instr.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/25 17:26:38 by scesar            #+#    #+#             */
+/*   Updated: 2025/07/25 17:27:15 by scesar           ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
-# include "../inc/minishell.h"
-
-void free_instr (t_instructions *instru)
-{
-
-}
-
-// void set_redir(t_instructions *instr, t_commands *cmd)
-// {
-// 	size_t index;
-
-// 	index = 0;
-// 	// instr->redir = malloc(sizeof(t_redir));
-// 	while (cmd->args[index])
-// 	{
-// 		if (cmd->args[index]->type == REDIR_IN || cmd->args[index]->type == HEREDOC)
-// 		{
-// 			if (cmd->args[index + 1] && cmd->args[index + 1]->type == FILENAME)
-// 				add_redir(&instr->in_redir, cmd->args[index]->type, cmd->args[index + 1]->content);
-// 			index++;
-// 		}
-// 		else if (cmd->args[index]->type == REDIR_OUT || cmd->args[index]->type == APPEND)
-// 		{
-// 			if (cmd->args[index + 1] && cmd->args[index + 1]->type == FILENAME)
-// 				add_redir(&instr->out_redir, cmd->args[index]->type, cmd->args[index + 1]->content);
-// 			index++;
-// 		}
-// 		index ++;
-// 	}
-// }
+#include "../inc/minishell.h"
 
 size_t	tok_to_keep_tab_len(t_token **tokens)
 {
-	size_t index;
-	size_t to_keep;
+	size_t	index;
+	size_t	to_keep;
 
 	index = 0;
 	to_keep = 0;
@@ -57,12 +28,12 @@ size_t	tok_to_keep_tab_len(t_token **tokens)
 	return (to_keep);
 }
 
-char **tok_into_tab(t_minishell *minish, t_token **tokens)
+char	**tok_into_tab(t_minishell *minish, t_token **tokens)
 {
-	size_t i;
-	size_t index;
-	size_t to_keep;
-	char **tab;
+	size_t	i;
+	size_t	index;
+	size_t	to_keep;
+	char	**tab;
 
 	i = 0;
 	index = 0;
@@ -74,11 +45,11 @@ char **tok_into_tab(t_minishell *minish, t_token **tokens)
 	{
 		if (is_executable_token(tokens[i]->type))
 		{
-			if (tokens[i]->content && tokens[i]->content[0] != '\0') // Check if content is not empty
+			if (tokens[i]->content && tokens[i]->content[0] != '\0')
 			{
 				tab[index] = get_new_string(*minish, tokens[i]->content);
 				if (!tab[index])
-					return ((free_array(&tab)), NULL); // malloc error
+					return ((free_array(&tab)), NULL);
 				index++;
 			}
 		}

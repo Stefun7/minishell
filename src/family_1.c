@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:33:53 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 15:10:46 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/25 18:12:28 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	run(t_minishell *minish)
 	int	i;
 
 	i = 0;
-	if (built_in_parent(minish->instru[0].exec[0])
+	if (minish->instru[0].exec[0] && built_in_parent(minish->instru[0].exec[0])
 		&& minish->number_of_commands == 1)
 		minish->last_exit_status = exec_builtin(minish->instru[0].exec, minish);
 	else
@@ -96,11 +96,11 @@ void	path_not_found(char *pcommand, t_minishell *minish)
 
 void	child_process(t_minishell *minish, t_instructions *instr, int parser)
 {
-	if (is_builtin(instr->exec[0]))
+	if (instr->exec[0] != NULL && is_builtin(instr->exec[0]))
 		instr->path_command = instr->exec[0];
-	else
+	else if (instr->exec[0] != NULL)
 		instr->path_command = path_finding(instr->exec[0], &minish->envp);
-	if (instr->path_command == NULL)
+	if (instr->exec[0] != NULL && instr->path_command == NULL)
 		path_not_found(instr->exec[0], minish);
 	access_test(minish, instr, parser);
 	no_redirection_proc(minish, instr, parser);
