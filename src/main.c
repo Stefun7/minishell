@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:43 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/25 17:50:53 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/26 15:55:24 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,6 @@ int	treat_input(t_minishell **minish, char *input)
 	free_commands(cmd_as_tokens);
 	if (!(*minish)->instru)
 		return (0);
-	int i = 0;
-	// while((*minish)->instru[0].in_redir[i].file_name)
-	// {
-	// 	printf("file : %s\n", (*minish)->instru[0].in_redir[i].file_name);
-	// 	printf("type : %d\n", (*minish)->instru[0].in_redir[i].type);
-	// 	i++;
-	// }
-	// i = 0;
-	// while((*minish)->instru[0].out_redir[i].file_name)
-	// {
-	// 	printf("file : %s\n", (*minish)->instru[0].out_redir[i].file_name);
-	// 	printf("type : %d\n", (*minish)->instru[0].out_redir[i].type);
-	// 	i++;
-	// }
 	(*minish)->fd_pipes = malloc(sizeof(int [2])
 			* ((*minish)->number_of_commands));
 	if (!(*minish)->fd_pipes)
@@ -92,7 +78,6 @@ int	main(int ac, char **av, char **envp)
 		if (!prompt)
 			break ;
 		input = readline(prompt);
-		enable_echoctl();
 		free(prompt);
 		if (!input)
 			break ;
@@ -103,6 +88,5 @@ int	main(int ac, char **av, char **envp)
 		free(input);
 	}
 	free_minish_total(&minish);
-	printf("exit\n");
 	return (0);
 }

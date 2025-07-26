@@ -34,10 +34,12 @@ int	add_loc_var(t_env **minish_envp, t_env **minish_local_var, char *input)
 	equal = valid_var_add(input);
 	pres_var = ft_substr(input, 0, equal - input);
 	if (!equal || !pres_var)
-		return (0);
+		return (free(pres_var), 0);
 	next_var = get_var(minish_envp, minish_local_var, pres_var);
 	if (next_var != NULL)
-		return (update_val(next_var, equal + 1, pres_var));
+	if (!update_val(next_var, equal + 1, pres_var))
+		return (free(pres_var), 0);						//malloc error
+	free(pres_var);
 	set_next_var(&next_var, input, equal);
 	next_var->next = NULL;
 	if (!*minish_local_var)

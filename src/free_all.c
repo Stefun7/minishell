@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:59 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/23 20:16:22 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/26 15:53:10 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@ void	free_commands(t_commands *cmd)
 	while (current)
 	{
 		next = current->next_command;
-		// printf("free_commands: freeing as_str at %p\n", (void *)current->as_str);
 		free(current->as_str);
 		free_tokens(current->args);
-		// printf("free_commands: freeing command node at %p\n", (void *)current);
 		free(current);
 		current = next;
 	}

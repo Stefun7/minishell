@@ -12,6 +12,25 @@
 
 #include "../inc/minishell.h"
 
+void	free_pipe_token(t_token **tokens)
+{
+	size_t	i;
+
+	if (!tokens)
+		return ;
+	i = 0;
+	while (tokens[i])
+	{
+		if (tokens[i]->type == PIPE)
+		{
+			free(tokens[i]->content);
+			free(tokens[i]);
+			tokens[i] = NULL;
+		}
+		i++;
+	}
+}
+
 void	free_tab(char **tab)
 {
 	size_t	i;

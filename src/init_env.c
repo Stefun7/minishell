@@ -61,11 +61,11 @@ int	set_next_var(t_env **next_envv, char *envv, char *equal)
 
 // bool	build_env(char **envp, int *i, t_env *minish_env, )
 
-void	init_env_var(size_t *i, t_env *current_envv, t_env *next_envv)
+void	init_env_var(size_t *i, t_env **current_envv, t_env **next_envv)
 {
-	i = 0;
-	current_envv = NULL;
-	next_envv = NULL;
+	*i = 0;
+	(*current_envv) = NULL;
+	(*next_envv) = NULL;
 }
 
 t_env	*set_envp(t_env **minish_env, char **envp)
@@ -75,7 +75,7 @@ t_env	*set_envp(t_env **minish_env, char **envp)
 	t_env	*current_envv;
 	t_env	*next_envv;
 
-	init_env_var(&i, current_envv, next_envv);
+	init_env_var(&i, &current_envv, &next_envv);
 	while (envp[i])
 	{
 		equal_is_there = ft_strchr(envp[i], '=');

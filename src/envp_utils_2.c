@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 15:05:45 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 15:09:43 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/26 15:53:02 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,4 +98,14 @@ int	remove_env_var(t_env **head, const char *var)
 		current = current->next;
 	}
 	return (0);
+}
+
+char	*get_var_value(t_env **minish_envp, t_env **minish_local_var, char *VAR)
+{
+	t_env	*var_node;
+
+	var_node = get_var(minish_envp, minish_local_var, VAR);
+	if (var_node && var_node->value)
+		return (var_node->value);
+	return (NULL);
 }

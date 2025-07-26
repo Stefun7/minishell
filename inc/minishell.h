@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 16:38:07 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/26 15:51:41 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,10 @@ int				var_already_there(t_env **minish_envp, t_env **minish_local_var,
 char			*valid_var_add(char *input);
 t_env			*get_var(t_env **minish_envp, t_env **minish_local_var,
 					char *VAR);
-void			init_env_var(size_t *i, t_env *current_envv, t_env *next_envv);
+void			init_env_var(size_t *i, t_env **current_envv,
+					t_env **next_envv);
+char			*get_var_value(t_env **minish_envp, t_env **minish_local_var,
+					char *VAR);
 
 //loc_var
 char			*fill_renew_str(char *last_str, size_t last_str_ind,
@@ -206,6 +209,7 @@ void			free_redirs(t_redir *redir, int count);
 void			free_commands(t_commands *cmd);
 void			free_envp(t_env *env);
 void			free_array(char ***array);
+void			free_pipe_token(t_token **tokens);
 
 ///////////////////////////////////EXECUTION///////////////////////////////////
 

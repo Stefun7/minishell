@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:51:38 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 17:02:00 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/26 15:52:06 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	put_elem_in_quotes(char	**elem, char **input, size_t *input_index,
 	(*elem)[(*elem_index)++] = quote;
 	(*input_index)++;
 	while ((*input)[*input_index] && (*input)[*input_index] != quote)
-		(*elem)[(*elem_index)++] = *input[(*input_index)++];
+		(*elem)[(*elem_index)++] = (*input)[(*input_index)++];
 	if ((*input)[*input_index] == quote)
 	{
 		(*elem)[(*elem_index)++] = (quote);
