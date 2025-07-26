@@ -115,6 +115,13 @@ bool  linker(t_commands whole_commands, t_commands *current_command, size_t *who
 	return (true);
 }
 
+void	init_command(t_commands *whole_commands)
+{
+	whole_commands->args = NULL;
+	whole_commands->as_str = NULL;
+	whole_commands->next_command = NULL;
+}
+
 t_commands  *tokenizer(char *input)
 {
 	t_commands whole_commands;
@@ -124,7 +131,7 @@ t_commands  *tokenizer(char *input)
 
 	if (!input || *input == '\0')
 		return (NULL);
-	whole_commands.args = NULL;
+	init_command(&whole_commands);
 	tab_input = ft_split_shell(input);
 	if (!tab_input || !tab_input[0])
 		return (NULL); // could be empty input or malloc error I think but have to check
@@ -141,7 +148,8 @@ t_commands  *tokenizer(char *input)
 		tab_index++;
 	}
 	whole_commands.args[tab_index] = NULL;
-	int i = 0;
+	if(!second_check(&whole_commands))
+		return(free_tokens(whole_commands.args), free_tab(tab_input), NULL);
 	first = create_command_list(whole_commands);
 	return (free_pipe_token(whole_commands.args),free(whole_commands.args), free_tab(tab_input),first);
 }

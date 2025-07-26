@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/26 15:51:41 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/26 23:17:35 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,16 +188,20 @@ void			handle_single_quote(char **dest, const char *str, size_t *i);
 void			handle_expand(char **dest, t_minishell ms, char *str,
 					size_t *i);
 
+//init_redir
+int				init_redir(t_instructions *instr, t_commands *cmd,
+					size_t *in_index, size_t *out_index);
+int				set_redir(t_instructions *instr, t_commands *cmd);
+t_redir			*add_redir(t_redir *redir_list, t_commands *cmd, size_t index,
+					size_t *io_index);
+bool			is_redir_in(t_token **token, size_t index);
+bool			is_redir_out(t_token **token, size_t index);
+
 //init_instr
 t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens);
-int				set_redir(t_instructions *instr, t_commands *cmd);
-t_redir			*add_redir(t_redir *redir_list, t_token_type type, char *file,
-					size_t *io_index);
 int				count_commands(t_commands *cmd_as_token);
 char			**tok_into_tab(t_minishell *minish, t_token **tokens);
 size_t			tok_to_keep_tab_len(t_token **tokens);
-t_token			**init_executable(t_token **cmd_as_tokens,
-					t_instructions *instru, int index, t_minishell *minish);
 
 //free everything
 void			exit_shell(char *error_message, t_minishell **minish);
