@@ -37,7 +37,7 @@ void	print_declare(t_env *envp)
 		return ;
 	while (smallest != NULL)
 	{
-		printf("declare -x %s=%s\n", smallest->var, smallest->value);
+		ft_printf(1, "declare -x %s=%s\n", smallest->var, smallest->value);
 		smallest = find_nth(smallest, envp);
 	}
 }
@@ -91,6 +91,7 @@ int	builtin_export(char **executables, t_minishell *minish)
 	int	index;
 
 	index = 1;
+	minish->last_exit_status = 0;
 	if (executables[1] == NULL)
 		print_declare(minish->envp);
 	else
@@ -99,9 +100,9 @@ int	builtin_export(char **executables, t_minishell *minish)
 		{
 			if (!is_valid_identifier(executables[index]))
 			{
-				write(2, "bash: export: `", 15);
-				write(2, executables[index], ft_strlen(executables[index]));
-				write(2, "': not a valid identifier\n", 27);
+				ft_printf(2, "bash: export: `%s': not a valid identifier\n",
+					executables[index]);
+				minish->last_exit_status = 1;
 			}
 			else if (ft_strchr(executables[index], '=') != NULL)
 				edit_env(executables[index], minish);
@@ -110,5 +111,5 @@ int	builtin_export(char **executables, t_minishell *minish)
 			index++;
 		}
 	}
-	return (0);
+	return (minish->last_exit_status);
 }

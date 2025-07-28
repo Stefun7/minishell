@@ -1,4 +1,51 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokeniser_help.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/28 11:53:12 by scesar            #+#    #+#             */
+/*   Updated: 2025/07/28 11:53:13 by scesar           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../inc/minishell.h"
+
+size_t	tab_size(char **tab)
+{
+	size_t	index;
+
+	index = 0;
+	while (tab[index])
+		index++;
+	return (index);
+}
+
+t_commands	*new_command_node(void)
+{
+	t_commands	*cmd;
+
+	cmd = malloc(sizeof(t_commands));
+	if (!cmd)
+		return (NULL);
+	cmd->as_str = NULL;
+	cmd->args = NULL;
+	cmd->next_command = NULL;
+	return (cmd);
+}
+
+t_token_type	get_token_type_from_context(t_token *prev)
+{
+	if (!prev)
+		return (CMD);
+	if (prev->type == REDIR_IN || prev->type == REDIR_OUT
+		|| prev->type == HEREDOC || prev->type == APPEND)
+		return (FILENAME);
+	else if (prev->type == CMD)
+		return (ARG);
+	return (CMD);
+}
 
 t_commands	*create_command_list(t_commands whole)
 {
@@ -29,3 +76,11 @@ t_commands	*create_command_list(t_commands whole)
 	return (current->next_command = NULL, first);
 }
 
+int	end_spaces(char *input, size_t *index)
+{
+	while (input[*index] == ' ' || input[*index] == '	')
+		(*index)++;
+	if (!input[*index])
+		return (0);
+	return (1);
+}

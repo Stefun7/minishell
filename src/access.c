@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/01 17:11:14 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 10:05:38 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/28 12:04:44 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	treat_redir_in(t_minishell *minish, t_redir *redir, int parser, int *fd)
 	if (redir->type == REDIR_IN)
 	{
 		if (access(redir->file_name, F_OK) != 0)
-			error(minish, "no such file or directory:", redir->file_name, 127);
+			error(minish, "no such file or directory", redir->file_name, 1);
 		else if (access(redir->file_name, R_OK) != 0)
 			error(minish, "permission denied:", redir->file_name, 126);
 		else
@@ -67,6 +67,8 @@ void	treat_redir_in(t_minishell *minish, t_redir *redir, int parser, int *fd)
 void	treat_redir_out(t_minishell *minish, t_redir *redir,
 		int parser, int *fd)
 {
+	if (!redir->file_name)
+		error(minish, "no such file or directory", NULL, 1);
 	if (access(redir->file_name, F_OK) == 0
 		&& access(redir->file_name, W_OK) != 0)
 		error(minish, "permission denied:", redir->file_name, 126);

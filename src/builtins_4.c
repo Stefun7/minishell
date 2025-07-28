@@ -25,10 +25,9 @@ void	builtin_exit(char **executables)
 	}
 	else if (ft_is_number(executables[1]) == 0)
 	{
-		write(2, "bash: exit: ", 12);
-		write(2, executables[1], ft_strlen(executables[1]));
-		write(2, ": numeric argument required\n", 28);
-		exit_status = 255;
+		ft_printf(2, "bash: exit: %s", executables[1]);
+		ft_printf(2, ": numeric argument required\n");
+		exit_status = 2;
 	}
 	else
 	{
@@ -36,7 +35,7 @@ void	builtin_exit(char **executables)
 		if (exit_status < 0 || exit_status > 255)
 			exit_status = exit_status % 256;
 	}
-	ft_printf("exit %d\n", exit_status);
+	ft_printf(1, "exit %d\n", exit_status);
 	exit(exit_status);
 }
 

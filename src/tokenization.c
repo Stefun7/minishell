@@ -1,37 +1,47 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenization.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/28 11:53:15 by scesar            #+#    #+#             */
+/*   Updated: 2025/07/28 11:53:16 by scesar           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-//will need to free all the as_str !!!
-char	*fill_str(t_commands whole_commands, t_commands *current_command, size_t whole_index)
+char	*fill_str(t_commands w_c, t_commands *current, size_t whole_index)
 {
-	char *res;
-	char *temp;
+	char	*res;
+	char	*temp;
 
 	res = NULL;
 	temp = NULL;
-	res = ft_strdup(whole_commands.args[whole_index]->content);
+	res = ft_strdup(w_c.args[whole_index]->content);
 	if (!res)
 		return (NULL);
 	whole_index++;
-	while (whole_commands.args[whole_index] && whole_commands.args[whole_index]->type != PIPE)
+	while (w_c.args[whole_index] && w_c.args[whole_index]->type != PIPE)
 	{
 		temp = ft_strjoin(res, " ");
 		free(res);
 		if (!temp)
 			return (NULL);
-		res = ft_strjoin(temp, whole_commands.args[whole_index]->content);
+		res = ft_strjoin(temp, w_c.args[whole_index]->content);
 		if (!res)
 			return (NULL);
 		free(temp);
 		whole_index++;
 	}
-	current_command->as_str = res;
+	current->as_str = res;
 	return (res);
 }
 
-size_t count_next_tokens(t_token **whole_commands, size_t index)
+size_t	count_next_tokens(t_token **whole_commands, size_t index)
 {
-	size_t tokens;
+	size_t	tokens;
 
 	tokens = 0;
 	while (whole_commands[index] && whole_commands[index]->type != PIPE)
@@ -42,114 +52,80 @@ size_t count_next_tokens(t_token **whole_commands, size_t index)
 	return (tokens);
 }
 
-t_commands *new_command_node()
+int	tok_type_init(char *content, t_commands *commands, size_t index)
 {
-	t_commands *cmd = malloc(sizeof(t_commands));
-
-	if (!cmd)
-		return NULL;
-	// printf("new_command_node: allocated at %p\n", (void*)cmd);
-
-	cmd->as_str = NULL;
-	cmd->args = NULL;
-	cmd->next_command = NULL;
-	return (cmd);
-}
-
-int tok_type_init(char *content, t_commands *commands, size_t index)
-{
-	t_token *previous_arg;
+	t_token	*previous_arg;
 
 	previous_arg = NULL;
 	commands->args[index] = malloc(sizeof(t_token));
 	if (!commands->args[index])
-		return (0); // Handle malloc failure
+		return (0);
 	commands->args[index]->content = ft_strdup(content);
 	if (!commands->args[index]->content)
 		return (free_tokens(&commands->args[index]), 0);
 	if (index > 0)
 		previous_arg = commands->args[index - 1];
-	if (special_symb_2(content) != NONE )
-		commands->args[index]->type = special_symb_2(content);	//see if (char)tab_input[0] prettier
+	if (special_symb_2(content) != NONE)
+		commands->args[index]->type = special_symb_2(content);
 	else if (previous_arg && content[0] == '-' && previous_arg->type == CMD)
 		commands->args[index]->type = FLAG;
 	else
-	{
-		if (previous_arg &&
-			(previous_arg->type == REDIR_IN || previous_arg->type == REDIR_OUT
-			|| previous_arg->type == HEREDOC ||previous_arg->type == APPEND))
-			commands->args[index]->type = FILENAME;
-		else if (previous_arg && previous_arg->type == CMD)
-			commands->args[index]->type = ARG;
-		else
-			commands->args[index]->type = CMD;
-	}
+		commands->args[index]->type = get_token_type_from_context(previous_arg);
 	return (1);
 }
 
-bool  linker(t_commands whole_commands, t_commands *current_command, size_t *whole_index)
+bool	linker(t_commands w_c, t_commands *current, size_t *whole_index)
 {
-	size_t curr_index;
-	size_t count;
+	size_t	curr_index;
+	size_t	count;
 
-	if (!whole_commands.args || !current_command)
-		return ( false);
+	if (!w_c.args || !current)
+		return (false);
 	curr_index = 0;
-	count = count_next_tokens(whole_commands.args, *whole_index);
+	count = count_next_tokens(w_c.args, *whole_index);
 	if (count == 0)
-		return ( false);
-	current_command->args = malloc(sizeof(t_token *) * (count + 1));
-	if (!current_command->args)
+		return (false);
+	current->args = malloc(sizeof(t_token *) * (count + 1));
+	if (!current->args)
 		return (false);
 	while (curr_index < count)
 	{
-		if (!whole_commands.args[*whole_index])
-			return (free(current_command->args), current_command->args = NULL, false);
-		current_command->args[curr_index] = whole_commands.args[*whole_index];
+		if (!w_c.args[*whole_index])
+			return (free(current->args), current->args = NULL, false);
+		current->args[curr_index] = w_c.args[*whole_index];
 		curr_index++;
 		(*whole_index)++;
 	}
-	current_command->args[curr_index] = NULL;
-	if (whole_commands.args[*whole_index] && whole_commands.args[*whole_index]->type == PIPE)
+	current->args[curr_index] = NULL;
+	if (w_c.args[*whole_index] && w_c.args[*whole_index]->type == PIPE)
 		(*whole_index)++;
 	return (true);
 }
 
-void	init_command(t_commands *whole_commands)
+t_commands	*tokenizer(char *input)
 {
-	whole_commands->args = NULL;
-	whole_commands->as_str = NULL;
-	whole_commands->next_command = NULL;
-}
-
-t_commands  *tokenizer(char *input)
-{
-	t_commands whole_commands;
-	t_commands *first;
-	char **tab_input;
-	size_t tab_index;
+	t_commands	w_c;
+	t_commands	*first;
+	char		**tab_input;
+	size_t		tab_index;
 
 	if (!input || *input == '\0')
 		return (NULL);
-	init_command(&whole_commands);
+	w_c.args = NULL;
 	tab_input = ft_split_shell(input);
 	if (!tab_input || !tab_input[0])
-		return (NULL); // could be empty input or malloc error I think but have to check
+		return (NULL);
 	tab_index = 0;
-	// write(2, "tokenizer\n", 11);
-	whole_commands.args = malloc(sizeof(t_token *) * (tab_size(tab_input) + 1));
-	// printf("tokenizer: allocated whole_commands.args at %p\n", (void*)whole_commands.args);
-	if (!whole_commands.args)
-		return (free_tokens(whole_commands.args), free_tab(tab_input), NULL);
+	w_c.args = malloc(sizeof(t_token *) * (tab_size(tab_input) + 1));
+	if (!w_c.args)
+		return (free_tokens(w_c.args), free_tab(tab_input), NULL);
 	while (tab_input[tab_index])
 	{
-		if (!tok_type_init(tab_input[tab_index], &whole_commands, tab_index))
-			return (free_tokens(whole_commands.args), free_tab(tab_input), NULL);
+		if (!tok_type_init(tab_input[tab_index], &w_c, tab_index))
+			return (free_tokens(w_c.args), free_tab(tab_input), NULL);
 		tab_index++;
 	}
-	whole_commands.args[tab_index] = NULL;
-	if(!second_check(&whole_commands))
-		return(free_tokens(whole_commands.args), free_tab(tab_input), NULL);
-	first = create_command_list(whole_commands);
-	return (free_pipe_token(whole_commands.args),free(whole_commands.args), free_tab(tab_input),first);
+	w_c.args[tab_index] = NULL;
+	first = create_command_list(w_c);
+	return (free_pipe(w_c.args), free(w_c.args), free_tab(tab_input), first);
 }

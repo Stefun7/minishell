@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:43 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/26 21:52:37 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/28 16:11:11 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ int	treat_input(t_minishell **minish, char *input)
 	if (empty_input(input))
 		return (1);
 	if (!first_check(input))
-		return ((*minish)->last_exit_status = 2, 3);			//still have to return 3 ?
+		return ((*minish)->last_exit_status = 2, 3);
 	if (add_loc_var(&(*minish)->envp, &(*minish)->local_var, input))
 		return (1);
 	cmd_as_tokens = tokenizer(input);
 	if (!cmd_as_tokens)
-		return (3);								//still have to change the 3 ?
+		return (0);
 	(*minish)->number_of_commands = count_commands(cmd_as_tokens);
 	(*minish)->instru = init_insrtu((*minish), cmd_as_tokens);
 	free_commands(cmd_as_tokens);
@@ -43,7 +43,7 @@ void	init_minish(t_minishell **minish, char **envp)
 	char	*shlvl[3];
 
 	shlvl[0] = "export";
-	shlvl[1] = "shlvl=1";
+	shlvl[1] = "SHLVL=1";
 	shlvl[2] = NULL;
 	(*minish) = malloc(1 * sizeof(t_minishell));
 	if (!(*minish))
@@ -57,7 +57,7 @@ void	init_minish(t_minishell **minish, char **envp)
 	(*minish)->last_exit_status = 0;
 	if (!set_envp(&(*minish)->envp, envp))
 		exit_shell("Something went wrong while setting env\n", minish);
-	if (get_var(&(*minish)->envp, &(*minish)->local_var, "shlvl") == NULL)
+	if (get_var(&(*minish)->envp, NULL, "SHLVL") == NULL)
 		exec_builtin(shlvl, (*minish));
 	setup_signals();
 }
@@ -86,5 +86,6 @@ int	main(int ac, char **av, char **envp)
 		free(input);
 	}
 	free_minish_total(&minish);
+	ft_printf(1, "exit\n");
 	return (0);
 }

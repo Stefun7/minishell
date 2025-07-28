@@ -24,22 +24,17 @@ char	*get_curr_path(t_env **envp)
 		return (NULL);
 	if (!getcwd(cwd, sizeof(cwd)))
 		return (NULL);
-
 	path = ft_strdup("~");
 	if (!path)
 		return (NULL);
-
 	temp = ft_strjoin(path, cwd + ft_strlen(home));
-
 	free(path);
 	if (!temp)
 		return (NULL);
-
 	path = ft_strjoin(temp, ": ");
 	free(temp);
 	if (!path)
 		return (NULL);
-
 	return (path);
 }
 

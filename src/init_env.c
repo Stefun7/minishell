@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 20:16:35 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 15:07:27 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/28 16:21:49 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,14 @@ int	set_next_var(t_env **next_envv, char *envv, char *equal)
 	*next_envv = malloc(sizeof(t_env));
 	(*next_envv)->var = NULL;
 	(*next_envv)->value = NULL;
+	(*next_envv)->next = NULL;
 	if (!*next_envv)
 		return (0);
 	(*next_envv)->var = ft_substr(envv, 0, equal - envv);
 	if (!(*next_envv)->var)
 		return (0);
 	(*next_envv)->value = ft_strdup(equal + 1);
-	if (ft_strcmp((*next_envv)->var, "shlvl") == 0)
+	if (ft_strcmp((*next_envv)->var, "SHLVL") == 0)
 		return (update_shlvl(next_envv));
 	if (!(*next_envv)->value)
 	{
@@ -104,8 +105,8 @@ t_env	*create_env_node(char *var, char *value)
 	new = malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	new->var = strdup(var);
-	new->value = strdup(value);
+	new->var = ft_strdup(var);
+	new->value = ft_strdup(value);
 	new->next = NULL;
 	return (new);
 }

@@ -26,7 +26,7 @@ int	ft_puthexa_maj_fd_(unsigned long nb, int fd);
 
 int	ft_putmem_ad_fd_(void *ptr, int fd);
 
-int	args_match_format(const char format, va_list args_to_print);
-int	ft_printf(const char *args_format, ...);
+int	args_match_format(const char format, va_list args_to_print, int fd);
+int	ft_printf(int fd, const char *args_format, ...);
 
 #endif

@@ -1,47 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_utlis_2.c                                     :+:      :+:    :+:   */
+/*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/18 23:54:27 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/18 23:54:57 by scesar           ###   ########.fr       */
+/*   Created: 2025/07/28 11:53:06 by scesar            #+#    #+#             */
+/*   Updated: 2025/07/28 11:53:07 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-void	free_pipe(t_token **tokens)
+int	path_len(char *string, int index)
 {
-	size_t	i;
+	int	second_index;
 
-	if (!tokens)
-		return ;
-	i = 0;
-	while (tokens[i])
-	{
-		if (tokens[i]->type == PIPE)
-		{
-			free(tokens[i]->content);
-			free(tokens[i]);
-			tokens[i] = NULL;
-		}
-		i++;
-	}
+	second_index = 0;
+	while (string[index + second_index] != '\0'
+		&& string[index + second_index] != ':'
+		&& string[index + second_index] != ' ')
+		second_index++;
+	return (second_index);
 }
 
-void	free_tab(char **tab)
+void	putcommand(char *command_to_path, char *potential_path, int size)
 {
-	size_t	i;
+	int	j;
 
-	i = 0;
-	if (!tab)
-		return ;
-	while (tab[i])
+	j = 0;
+	while (command_to_path[j] != '\0')
 	{
-		free(tab[i]);
-		i++;
+		potential_path[size + j] = command_to_path[j];
+		j++;
 	}
-	free(tab);
 }

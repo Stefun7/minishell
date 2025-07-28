@@ -30,6 +30,7 @@ int	run(t_minishell *minish)
 		}
 		process(minish);
 	}
+	free_minish_partial(&minish);
 	return (0);
 }
 
@@ -52,7 +53,6 @@ void	wait_exit(t_minishell *minish, pid_t	last_pid)
 		}
 		index++;
 	}
-	free_minish_partial(&minish);
 }
 
 void	process(t_minishell *minish)
@@ -96,17 +96,17 @@ void	path_not_found(char *pcommand, t_minishell *minish)
 
 void	child_process(t_minishell *minish, t_instructions *instr, int parser)
 {
+	access_test(minish, instr, parser);
+	no_redirection_proc(minish, instr, parser);
 	if (instr->exec[0] != NULL && is_builtin(instr->exec[0]))
 		instr->path_command = instr->exec[0];
 	else if (instr->exec[0] != NULL)
 		instr->path_command = path_finding(instr->exec[0], &minish->envp);
 	if (instr->exec[0] != NULL && instr->path_command == NULL)
 		path_not_found(instr->exec[0], minish);
-	access_test(minish, instr, parser);
-	no_redirection_proc(minish, instr, parser);
-	if (is_builtin(instr->path_command))
+	if (instr->exec[0] != NULL && is_builtin(instr->path_command))
 		exec_builtin(instr->exec, minish);
-	else
+	else if (instr->exec[0] != NULL)
 		execute(minish, instr, parser);
 	close_stuff(minish, parser);
 	exit(0);

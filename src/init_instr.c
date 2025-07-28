@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:26:38 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/26 23:15:42 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/25 17:27:15 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,6 @@ size_t	tok_to_keep_tab_len(t_token **tokens)
 	return (to_keep);
 }
 
-void	init_tok_tab(size_t *i, size_t *index, size_t *to_keep,
-		t_token **tokens)
-{
-	(*i) = 0;
-	(*index) = 0;
-	(*to_keep) = tok_to_keep_tab_len(tokens);
-}
-
 char	**tok_into_tab(t_minishell *minish, t_token **tokens)
 {
 	size_t	i;
@@ -43,26 +35,25 @@ char	**tok_into_tab(t_minishell *minish, t_token **tokens)
 	size_t	to_keep;
 	char	**tab;
 
-	init_tok_tab(&i, &index, &to_keep, tokens);
+	i = 0;
+	index = 0;
+	to_keep = tok_to_keep_tab_len(tokens);
 	tab = malloc(sizeof(char *) * (to_keep + 1));
 	if (!tab)
 		return (NULL);
 	while (tokens[i])
 	{
-		if (is_executable_token(tokens[i]->type))
+		if (is_executable_token(tokens[i]->type) && tokens[i]->content
+			&& tokens[i]->content[0] != '\0')
 		{
-			if (tokens[i]->content && tokens[i]->content[0] != '\0')
-			{
-				tab[index] = get_new_string(*minish, tokens[i]->content);
-				if (!tab[index])
-					return ((free_array(&tab)), NULL);
-				index++;
-			}
+			tab[index] = get_new_string(*minish, tokens[i]->content);
+			if (!tab[index])
+				return ((free_array(&tab)), NULL);
+			index++;
 		}
 		i++;
 	}
-	tab[index] = NULL;
-	return (tab);
+	return (tab[index] = NULL, tab);
 }
 
 t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens)
@@ -80,7 +71,7 @@ t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens)
 		instru[index].path_command = NULL;
 		instru[index].in_redir = NULL;
 		instru[index].out_redir = NULL;
-		if (!set_redir(&instru[index], cmd_as_tokens))
+		if (!prep_set_redir(&instru[index], cmd_as_tokens, minish))
 			return (NULL);
 		instru[index].exec = tok_into_tab(minish, cmd_as_tokens->args);
 		if (!instru[index].exec)

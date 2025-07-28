@@ -15,9 +15,9 @@
 char	*path_finding(char *pathed, t_env **envp)
 {
 	t_env		*path;
-	char	*full_path;
+	char		*full_path;
 
-	if (ft_strchr(pathed, '/'))					//covers full path
+	if (ft_strchr(pathed, '/'))
 	{
 		if (access(pathed, X_OK) == 0)
 			return (ft_strdup(pathed));
@@ -26,26 +26,12 @@ char	*path_finding(char *pathed, t_env **envp)
 	}
 	path = get_var(envp, NULL, "PATH");
 	if (path == NULL)
-		return (NULL);		//not sure we need to protect here
-	// ft_putnbr_fd(path, 2);
+		return (NULL);
 	full_path = get_path(pathed, path->value, 5);
-	if (full_path == pathed)		//if the path is not found, we return the original command
+	if (full_path == pathed)
 		return (NULL);
 	return (full_path);
 }
-
-// char	*path_finding(char *pathed, char **env)
-// {
-// 	int		path;
-// 	char	*full_path;
-
-// 	path = find_string(env, "PATH");
-// 	if (path == -1)
-// 		return (NULL);
-// 	ft_putnbr_fd(path, 2);
-// 	full_path = get_path(pathed, env[path], 5);
-// 	return (full_path);
-// }
 
 char	*potential_pathing(char *paths, char *command_to_path, int *index)
 {
@@ -102,36 +88,10 @@ char	*get_path(char *command_to_path, char *paths, int index)
 	while (paths[index] != '\0')
 	{
 		full_path = potential_pathing(paths, command_to_path, &index);
-		// printf("full_path : %s\n", full_path);
-		// printf("to_path : %s\n", command_to_path);
-
 		if (access(full_path, X_OK) == 0)
 			return (full_path);
 		if (full_path != NULL)
 			free(full_path);
 	}
 	return (NULL);
-}
-int	path_len(char *string, int index)
-{
-	int	second_index;
-
-	second_index = 0;
-	while (string[index + second_index] != '\0'
-		&& string[index + second_index] != ':'
-		&& string[index + second_index] != ' ')
-		second_index++;
-	return (second_index);
-}
-
-void	putcommand(char *command_to_path, char *potential_path, int size)
-{
-	int	j;
-
-	j = 0;
-	while (command_to_path[j] != '\0')
-	{
-		potential_path[size + j] = command_to_path[j];
-		j++;
-	}
 }

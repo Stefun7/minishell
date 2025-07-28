@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 17:41:28 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/26 22:03:29 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 10:18:48 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,19 @@ int	first_check(char *input)
 
 	index = 0;
 	if (unclosed_quotes(input))
+		return (write(2, "Syntax error: Unclosed quotes.\n", 32), 0);
+	while (input[index] != 0)
 	{
-		write(2, "Syntax error: Unclosed quotes.\n", 32);
-		return (0);
-	}
-	while (input[index] == ' ')
+		if (input[index] == '>' || input[index] == '<')
+			if (!redir_check_syntax(input, index))
+				return (0);
+		if (input[index] == '|')
+		{
+			if (!check_pipe_syntax(input, index))
+				return (0);
+		}
+		skip_quotes(input, &index);
 		index ++;
-	if (input[index] == '|')
-	{
-		write(2, "Syntax error near unexpected token `|'\n", 40);
-		return (0);
 	}
 	return (1);
 }
@@ -78,16 +81,11 @@ int	redir_check(t_token *current, t_token *next)
 	if (current->type == (REDIR_IN) || current->type == (REDIR_OUT)
 		|| current->type == (HEREDOC) || current->type == (APPEND))
 	{
+		ft_printf(2, "Bash: Syntax error near unexpected token");
 		if (!next)
-		{
-			printf("Syntax error near unexpected token `newline'\n");
-			return (0);
-		}
+			return (ft_printf(2, " `newline'\n"), 0);
 		if (next->type != FILENAME)
-		{
-			printf("Syntax error near unexpected token `%s'\n", next->content);
-			return (0);
-		}
+			return (ft_printf(2, " `%s'\n", next->content), 0);
 	}
 	return (1);
 }
@@ -98,12 +96,12 @@ int	pipe_check(t_token *current, t_token *next)
 	{
 		if (!next)
 		{
-			printf("Syntax error near unexpected token `newline'\n");
+			ft_printf(2, "Syntax error near unexpected token `newline'\n");
 			return (0);
 		}
 		if (next->type == PIPE)
 		{
-			printf("Syntax error near unexpected token `|'\n");
+			ft_printf(2, "Syntax error near unexpected token `|'\n");
 			return (0);
 		}
 	}

@@ -12,33 +12,35 @@
 
 #include "../../inc/ft_printf.h"
 
-int	args_match_format(const char format, va_list args_to_print)
+int	args_match_format(const char format, va_list args_to_print, int fd)
 {
 	int	ret_value;
 
 	ret_value = 1;
 	if (format == 'c')
-		ret_value += ft_putchar_fd_(va_arg(args_to_print, int), 1);
+		ret_value += ft_putchar_fd_(va_arg(args_to_print, int), fd);
 	else if (format == 's')
-		ret_value += ft_putstr_fd_(va_arg(args_to_print, char *), 1);
+		ret_value += ft_putstr_fd_(va_arg(args_to_print, char *), fd);
 	else if (format == 'p')
-		ret_value += ft_putmem_ad_fd_(va_arg(args_to_print, void *), 1);
+		ret_value += ft_putmem_ad_fd_(va_arg(args_to_print, void *), fd);
 	else if (format == 'd' || format == 'i')
-		ret_value += ft_putnbr_fd_(va_arg(args_to_print, int), 1);
+		ret_value += ft_putnbr_fd_(va_arg(args_to_print, int), fd);
 	else if (format == 'u')
-		ret_value += ft_putnbr_unint_(va_arg(args_to_print, unsigned long), 1);
+		ret_value += ft_putnbr_unint_(va_arg(args_to_print, unsigned long), fd);
 	else if (format == 'x')
-		ret_value += ft_puthexa_min_fd_(va_arg(args_to_print, unsigned int), 1);
+		ret_value += ft_puthexa_min_fd_(va_arg(args_to_print,
+					unsigned int), fd);
 	else if (format == 'X')
-		ret_value += ft_puthexa_maj_fd_(va_arg(args_to_print, unsigned int), 1);
+		ret_value += ft_puthexa_maj_fd_(va_arg(args_to_print,
+					unsigned int), fd);
 	else if (format == '%')
-		ret_value += ft_putchar_fd_('%', 1);
+		ret_value += ft_putchar_fd_('%', fd);
 	else
 		return (0);
 	return (ret_value);
 }
 
-int	ft_printf(const char *args_format, ...)
+int	ft_printf(int fd, const char *args_format, ...)
 {
 	va_list	args_to_print;
 	int		ret_value;
@@ -52,13 +54,13 @@ int	ft_printf(const char *args_format, ...)
 		if (*args_format == '%')
 		{
 			args_format ++;
-			check = args_match_format(*args_format, args_to_print);
+			check = args_match_format(*args_format, args_to_print, fd);
 			if (!check)
 				return (ret_value);
 			ret_value += (check - 1);
 		}
 		else
-			ret_value += ft_putchar_fd_(*args_format, 1);
+			ret_value += ft_putchar_fd_(*args_format, fd);
 		args_format ++;
 	}
 	va_end(args_to_print);

@@ -47,13 +47,13 @@ int	builtin_echo(char **executables)
 		newline = 0;
 	while (executables[i])
 	{
-		ft_printf("%s", executables[i]);
+		ft_printf(1, "%s", executables[i]);
 		if (executables[i + 1])
-			ft_printf(" ");
+			ft_printf(1, " ");
 		i++;
 	}
 	if (newline)
-		ft_printf("\n");
+		ft_printf(1, "\n");
 	return (0);
 }
 

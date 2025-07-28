@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/26 23:17:35 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/28 16:30:26 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,9 +134,10 @@ t_commands		*create_command_list(t_commands whole);
 char			*fill_str(t_commands whole_commands,
 					t_commands *current_command, size_t whole_index);
 t_commands		*new_command_node(void);
-bool			linker(t_commands whole_commands,
-					t_commands *current_command, size_t *whole_index);
+bool			linker(t_commands w_c, t_commands *current,
+					size_t *whole_index);
 void			free_tokens_partial(t_token **tokens);
+t_token_type	get_token_type_from_context(t_token *prev);
 
 //checker
 int				first_check(char *input);
@@ -159,13 +160,16 @@ size_t			len_spe_symb(char *input, size_t input_index);
 bool			empty_input(char *input);
 void			putstr_bsn(char *str, int fd, bool bsn);
 int				end_spaces(char *input, size_t *index);
+void			skip_quotes(char *str, size_t *index);
+int				check_pipe_syntax(char *input, size_t index);
+int				redir_check_syntax(char *input, size_t index);
 
 //init_env
 t_env			*set_envp(t_env **minish_env, char **envp);
 int				set_next_var(t_env **next_envv, char *envv, char *equal);
 int				var_already_there(t_env **minish_envp, t_env **minish_local_var,
 					char *next_var);
-char			*valid_var_add(char *input);
+bool			valid_var_add(char *input, char **equal);
 t_env			*get_var(t_env **minish_envp, t_env **minish_local_var,
 					char *VAR);
 void			init_env_var(size_t *i, t_env **current_envv,
@@ -187,21 +191,23 @@ void			append_char(char **dest, char c);
 void			handle_single_quote(char **dest, const char *str, size_t *i);
 void			handle_expand(char **dest, t_minishell ms, char *str,
 					size_t *i);
-
-//init_redir
-int				init_redir(t_instructions *instr, t_commands *cmd,
-					size_t *in_index, size_t *out_index);
-int				set_redir(t_instructions *instr, t_commands *cmd);
-t_redir			*add_redir(t_redir *redir_list, t_commands *cmd, size_t index,
-					size_t *io_index);
-bool			is_redir_in(t_token **token, size_t index);
-bool			is_redir_out(t_token **token, size_t index);
+int				update_in_double(const char *s, size_t *i, bool *in_double);
 
 //init_instr
 t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens);
+int				set_redir(t_instructions *instr, t_commands *cmd,
+					t_minishell *minish, size_t i[3]);
+int				prep_set_redir(t_instructions *instr, t_commands *cmd,
+					t_minishell *minish);
+t_redir			*add_redir(t_redir *redir_list, t_token_type type, char *file,
+					size_t *io_index);
 int				count_commands(t_commands *cmd_as_token);
 char			**tok_into_tab(t_minishell *minish, t_token **tokens);
 size_t			tok_to_keep_tab_len(t_token **tokens);
+t_token			**init_executable(t_token **cmd_as_tokens,
+					t_instructions *instru, int index, t_minishell *minish);
+bool			out_tok(t_token_type type);
+bool			in_tok(t_token_type type);
 
 //free everything
 void			exit_shell(char *error_message, t_minishell **minish);
@@ -213,7 +219,7 @@ void			free_redirs(t_redir *redir, int count);
 void			free_commands(t_commands *cmd);
 void			free_envp(t_env *env);
 void			free_array(char ***array);
-void			free_pipe_token(t_token **tokens);
+void			free_pipe(t_token **tokens);
 
 ///////////////////////////////////EXECUTION///////////////////////////////////
 

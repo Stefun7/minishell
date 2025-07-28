@@ -56,8 +56,7 @@ int	is_builtin(char *cmd)
 int	built_in_parent(char *cmd)
 {
 	return (ft_strcmp(cmd, "cd") == 0 || ft_strcmp(cmd, "export") == 0
-		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "exit") == 0
-		|| ft_strcmp(cmd, "echo") == 0);
+		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "exit") == 0);
 }
 
 int	builtin_env(t_env *envp)
@@ -65,7 +64,7 @@ int	builtin_env(t_env *envp)
 	while (envp != NULL)
 	{
 		if (envp->var && envp->value)
-			ft_printf("%s=%s\n", envp->var, envp->value);
+			ft_printf(1, "%s=%s\n", envp->var, envp->value);
 		envp = envp->next;
 	}
 	return (0);

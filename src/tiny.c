@@ -22,3 +22,24 @@ bool	is_executable_token(t_token_type type)
 {
 	return (type == CMD || type == ARG || type == FLAG);
 }
+
+bool	out_tok(t_token_type type)
+{
+	return (type == REDIR_OUT || type == APPEND);
+}
+
+bool	in_tok(t_token_type type)
+{
+	return (type == REDIR_IN || type == HEREDOC);
+}
+
+int	update_in_double(const char *s, size_t *i, bool *in_double)
+{
+	if (s[*i] == '\"')
+	{
+		*in_double = !(*in_double);
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}

@@ -1,0 +1,23 @@
+this is the end warn me if you want to change anything also tell me if there's something wrong with signals and what
+i'd advise you to do tests and show me the result somewhere with a tldr here as well for stuff that don't work the way they're supposed to
+don't forget to compare with bash
+we will do our first real correction as early as possible this week
+i have faith the end of this is near...
+
+
+ps i did revert a lot of things but it's based on comparison with bash on my laptop
+ps2 sorry for the global variable i'll look into it tmrw a little but i think we can have it iirc
+
+Thanks !!!
+Here is a list with every problem I found, and every things I changed
+
+
+Still in progress :
+- Ctrl + \ still segfault on shool pc
+- unset doesnt unset loc var
+
+Done :
+- Few little things norminetted in .h and Libft
+- In access : delete message "treat redr_out"
+- In init_env : delete message "update_shlvl"
+- loc var was segfaulting (command like "MOI=Stephen")

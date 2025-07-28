@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:14:18 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/18 23:19:16 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/28 16:30:03 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,21 @@ int	var_already_there(t_env **minish_envp, t_env **minish_local_var,
 	return (0);
 }
 
-char	*valid_var_add(char *input)	//check if enough protection
+bool	valid_var_add(char *input, char **equal)	//check if enough protection
 {
 	size_t	i;
-	char	*equal;
 
 	if (!input || input[0] == '=' || ft_isdigit(input[0]))
-		return (NULL);
-	equal = ft_strchr(input, '=');
-	if (!equal)
-		return (NULL);
+		return (false);
+	*equal = ft_strchr(input, '=');
+	if (!*equal)
+		return (false);
 	i = 0;
 	while (input[i] && input[i] != '=')
 	{
 		if (!ft_isalnum(input[i]) && input[i] != '_')
-			return (0);		
+			return (false);
 		i++;
 	}
-	return (equal);
+	return (true);
 }

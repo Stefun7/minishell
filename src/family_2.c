@@ -58,11 +58,9 @@ void	close_stuff(t_minishell *minish, int parser)
 
 void	error(t_minishell *minish, char *reason, char *specific, int exit_stat)
 {
-	int	index;
-
-	index = 0;
-	ft_putstr_fd(specific, 2);
-	ft_putstr_fd(reason, 2);
-	free_minish_total(&minish);
+	if (specific == NULL)
+		ft_printf(2, "bash: %s\n", reason);
+	else
+		ft_printf(2, "bash: %s :%s", specific, reason);
 	exit(exit_stat);
 }
