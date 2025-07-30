@@ -1,37 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   path_utils.c                                       :+:      :+:    :+:   */
+/*   heredoc2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/07/30 18:39:24 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/30 18:39:25 by scesar           ###   ########.fr       */
+/*   Created: 2025/07/30 18:37:30 by scesar            #+#    #+#             */
+/*   Updated: 2025/07/30 18:37:43 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-int	path_len(char *string, int index)
+void	heredoc_child(char *stop, int write_fd)
 {
-	int	second_index;
+	char	*line;
 
-	second_index = 0;
-	while (string[index + second_index] != '\0'
-		&& string[index + second_index] != ':'
-		&& string[index + second_index] != ' ')
-		second_index++;
-	return (second_index);
-}
-
-void	putcommand(char *command_to_path, char *potential_path, int size)
-{
-	int	j;
-
-	j = 0;
-	while (command_to_path[j] != '\0')
+	heredoc_signals();
+	while (1)
 	{
-		potential_path[size + j] = command_to_path[j];
-		j++;
+		line = readline("> ");
+		if (!line)
+			break ;
+		if (ft_strcmp(line, stop) == 0)
+		{
+			free(line);
+			break ;
+		}
+		write(write_fd, line, ft_strlen(line));
+		write(write_fd, "\n", 1);
+		free(line);
 	}
+	close(write_fd);
 }

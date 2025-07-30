@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:59 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/23 20:16:22 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 18:36:45 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	free_instructions(t_instructions *instru, int count)
 			free(instru[i].exec);
 		}
 		free(instru[i].path_command);
+		instru[i].skip = false;
 		i++;
 	}
 	free(instru);

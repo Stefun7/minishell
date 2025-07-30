@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 18:14:58 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/28 16:27:07 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 16:22:25 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,6 @@ int	update_val(t_env *next_var, char *after_equal)
 		return (0);
 	return (1);
 }
-
-// void	set_loc_var_list(t_env *minish_local_var, t_env *next_var)
-// {
-
-// }
 
 int	add_loc_var(t_env **minish_envp, t_env **minish_local_var, char *input)
 {
@@ -55,39 +50,6 @@ int	add_loc_var(t_env **minish_envp, t_env **minish_local_var, char *input)
 	}
 	return (1);
 }
-// int	add_loc_var(t_env **minish_envp, t_env **minish_local_var, char *input)
-// {
-// 	t_env	*last_var;
-// 	t_env	*next_var;
-// 	char	*equal;
-// 	char	*pres_var;
-
-// 	equal = valid_var_add(input);
-
-// 	printf("equal : %s\n", equal);
-// 	pres_var = ft_substr(input, 0, equal - input);
-// 	if (!equal || !pres_var)
-// 		return (free(pres_var), 0);
-// 	next_var = get_var(minish_envp, minish_local_var, pres_var);
-// 	if (!update_val(next_var, equal + 1))
-// 	{
-// 		printf("top\n");
-// 		return (free(pres_var), 0);
-// 	}
-// 	free(pres_var);
-// 	set_next_var(&next_var, input, equal);
-// 	next_var->next = NULL;
-// 	if (!*minish_local_var)
-// 		*minish_local_var = next_var;
-// 	else
-// 	{
-// 		last_var = *minish_local_var;
-// 		while (last_var->next)
-// 			last_var = last_var->next;
-// 		last_var->next = next_var;
-// 	}
-// 	return (1);
-// }
 
 char	*dollar_interrogation(t_minishell minishell, char *string,
 							size_t **str_ind, char *temp)

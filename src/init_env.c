@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 20:16:35 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/28 16:21:49 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/24 15:07:27 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	set_next_var(t_env **next_envv, char *envv, char *equal)
 	*next_envv = malloc(sizeof(t_env));
 	(*next_envv)->var = NULL;
 	(*next_envv)->value = NULL;
-	(*next_envv)->next = NULL;
 	if (!*next_envv)
 		return (0);
 	(*next_envv)->var = ft_substr(envv, 0, equal - envv);

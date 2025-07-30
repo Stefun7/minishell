@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/28 16:30:26 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 18:33:20 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include <termios.h>
+# include <sys/stat.h>
 ///
 
 # define YES 1
@@ -89,6 +90,8 @@ typedef struct s_instructions
 	int		nb_files_in;
 	t_redir	*out_redir;
 	int		nb_files_out;
+	bool	skip;
+	int		fd_in;
 	char	*path_command;
 }			t_instructions;
 
@@ -97,6 +100,7 @@ typedef struct t_minishell
 	t_env			*envp;
 	t_env			*local_var;
 	char			*parsed_string;
+	int				non_inter;
 	t_instructions	*instru;
 	int				number_of_commands;
 	int				(*fd_pipes)[2];
@@ -106,8 +110,10 @@ typedef struct t_minishell
 ////////////////////////////////////PARSING////////////////////////////////////
 
 int				main(int argc, char **argv, char **envp);
-void			init_minish(t_minishell **minish, char **envp);
-t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens);
+void			init_minish(t_minishell **minish, char **envp,
+					int ac, char **av);
+int				is_interactive(t_minishell *minish);
+int				is_directory(const char *path);
 
 //prompt.c
 char			*get_prompt(t_env **envp);
@@ -174,8 +180,8 @@ t_env			*get_var(t_env **minish_envp, t_env **minish_local_var,
 					char *VAR);
 void			init_env_var(size_t *i, t_env **current_envv,
 					t_env **next_envv);
-char			*get_var_value(t_env **minish_envp, t_env **minish_local_var,
-					char *VAR);
+char			*get_var_value(t_env **minish_envp,
+					t_env **minish_local_var, char *VAR);
 
 //loc_var
 char			*fill_renew_str(char *last_str, size_t last_str_ind,
@@ -192,13 +198,14 @@ void			handle_single_quote(char **dest, const char *str, size_t *i);
 void			handle_expand(char **dest, t_minishell ms, char *str,
 					size_t *i);
 int				update_in_double(const char *s, size_t *i, bool *in_double);
+void			set_non_interactive(t_minishell **minish, int ac, char **av);
 
 //init_instr
 t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens);
 int				set_redir(t_instructions *instr, t_commands *cmd,
 					t_minishell *minish, size_t i[3]);
-int				prep_set_redir(t_instructions *instr, t_commands *cmd,
-					t_minishell *minish);
+int				prep_set_redir(t_instructions *instr,
+					t_commands *cmd, t_minishell *minish);
 t_redir			*add_redir(t_redir *redir_list, t_token_type type, char *file,
 					size_t *io_index);
 int				count_commands(t_commands *cmd_as_token);
@@ -220,7 +227,8 @@ void			free_commands(t_commands *cmd);
 void			free_envp(t_env *env);
 void			free_array(char ***array);
 void			free_pipe(t_token **tokens);
-
+int				cleanup_and_exit(t_minishell *minish);
+int				treat_input(t_minishell **minish, char *input);
 ///////////////////////////////////EXECUTION///////////////////////////////////
 
 //family
@@ -228,24 +236,38 @@ int				run(t_minishell *minish);
 void			process(t_minishell *minish);
 void			child_process(t_minishell *minish, t_instructions *instr,
 					int parser);
-void			execute(t_minishell *minish, t_instructions *instr, int parser);
+void			execute(t_minishell *minish, t_instructions *instr,
+					int parse, char **exec);
 void			close_parent(t_minishell *minish);
 void			close_stuff(t_minishell *minish, int parser);
 void			error(t_minishell *minish, char *reason, char *specific,
 					int exit_stat);
 char			*path_finding(char *pathed, t_env **envp);
 void			path_not_found(char *pcommand, t_minishell *minish);
+void			disable_echoctl(void);
+int				handle_exit_status(int status);
+void			child_signal(void);
+void			heredoc_signals(void);
 
 //access
 void			access_test(t_minishell *minish, t_instructions *instr,
 					int parser);
-void			treat_redir_in(t_minishell *minish, t_redir *redir, int parser,
+void			treat_redir_in(t_minishell *minish, t_redir *redir,
 					int *fd);
+void			do_ins(t_minishell *minish, t_instructions *instr);
 void			treat_redir_out(t_minishell *minish, t_redir *redir, int parser,
 					int *fd);
 int				heredoc_handle(char *stop);
 void			no_redirection_proc(t_minishell *minish, t_instructions *instr,
 					int parser);
+int				check_perm(char *path, t_token_type type);
+char			**shift_to_first_non_empty(char **args);
+int				find_non_empty(char **str);
+int				path_has_directory(const char *path);
+int				dir_exists(const char *path);
+void			here_wrap(t_minishell *minish);
+void			heredoc_child(char *stop, int write_fd);
+void			silence_signals(void);
 
 //builtins
 int				is_n_flag(const char *str);
@@ -262,18 +284,19 @@ void			print_declare(t_env *envp);
 int				edit_env(char *content, t_minishell *minish);
 int				is_valid_identifier(const char *str);
 int				builtin_export(char **executables, t_minishell *minish);
-void			builtin_exit(char **executables);
-int				builtin_unset(char **executables, t_env **envp);
+void			builtin_exit(char **executables, t_minishell *minish);
+int				builtin_unset(char **executables, t_minishell *minish);
 void			print_env_array(char **envp);
 
 //////////////////////////////////ENVIRONMENT//////////////////////////////////
 
 int				env_list_length(t_env *traveler);
-int				remove_env_var(t_env **head, const char *var);
+void			remove_var(t_env **envp_or_loc, char *to_remove);
 t_env			*find_first(t_env *envp);
 int				is_between_env(t_env *envp, t_env *smallest, t_env *bigger);
 t_env			*create_env_node(char *var, char *value);
 int				add_env_back(t_env **env_list, char *var, char *value);
+void			add_to_envp(t_minishell *minish, char *var);
 char			*join_var_value(char *var, char *value);
 char			**env_list_to_array(t_env *env, int len);
 int				update_env_value(t_env *env_list, const char *var_name,
@@ -289,7 +312,6 @@ void			setup_signals(void);
 void			sigquit_handler(int sig);
 void			sigint_handler(int sig);
 void			enable_echoctl(void);
-
 ///// tiny.c
 bool			is_env_char_end(char c);
 bool			is_executable_token(t_token_type type);

@@ -6,13 +6,13 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 20:12:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/23 20:15:20 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 18:42:29 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
 
-bool	is_env_char_end(char c)	//do we have to include the tab ?
+bool	is_env_char_end(char c)
 {
 	return (c == ' ' || c == '\"' || c == '$' || c == '>' || c == '<'
 		|| c == '\'' || c == '|' || c == '\0');

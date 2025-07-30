@@ -17,12 +17,20 @@ char	*path_finding(char *pathed, t_env **envp)
 	t_env		*path;
 	char		*full_path;
 
-	if (ft_strchr(pathed, '/'))
+	if (access(pathed, F_OK) == 0 && ft_strchr(pathed, '/'))
 	{
+		if (is_directory(pathed))
+		{
+			ft_printf(2, "%s: Is a directory\n", pathed);
+			exit(126);
+		}
 		if (access(pathed, X_OK) == 0)
 			return (ft_strdup(pathed));
 		else
-			return (NULL);
+		{
+			ft_printf(2, "Permission denied");
+			exit(126);
+		}
 	}
 	path = get_var(envp, NULL, "PATH");
 	if (path == NULL)
@@ -39,7 +47,7 @@ char	*potential_pathing(char *paths, char *command_to_path, int *index)
 	int		size;
 
 	size = path_len(paths, *index);
-	size += strlen(command_to_path);
+	size += ft_strlen(command_to_path);
 	potential_path = malloc((size + 2) * sizeof(char));
 	if (potential_path == NULL)
 		return (NULL);

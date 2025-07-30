@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 15:05:45 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 15:09:43 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 18:33:43 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,28 @@
 
 t_env	*get_var(t_env **minish_envp, t_env **minish_local_var, char *VAR)
 {
-	t_env	*travel_var;
+	t_env	*trav;
 
 	if (!VAR)
 		return (NULL);
-	travel_var = *minish_envp;
-	while (travel_var)
+	if (minish_envp != NULL)
 	{
-		if (ft_strcmp(travel_var->var, VAR) == 0)
-			return (travel_var);
-		travel_var = travel_var->next;
+		trav = *minish_envp;
+		while (trav)
+		{
+			if (ft_strcmp(trav->var, VAR) == 0)
+				return (trav);
+			trav = trav->next;
+		}
 	}
 	if (minish_local_var != NULL && *minish_local_var != NULL)
 	{
-		travel_var = *minish_local_var;
-		while (travel_var)
+		trav = *minish_local_var;
+		while (trav)
 		{
-			if (ft_strncmp((travel_var)->var, VAR,
-					ft_strlen(travel_var->var)) == 0)
-				return (travel_var);
-			travel_var = travel_var->next;
+			if (ft_strncmp((trav)->var, VAR, ft_strlen(trav->var)) == 0)
+				return (trav);
+			trav = trav->next;
 		}
 	}
 	return (NULL);
@@ -74,30 +76,31 @@ int	env_list_length(t_env *traveler)
 	return (count);
 }
 
-int	remove_env_var(t_env **head, const char *var)
+void	remove_var(t_env **envp_or_loc, char *to_remove)
 {
 	t_env	*current;
 	t_env	*prev;
 
-	current = *head;
+	current = *envp_or_loc;
 	prev = NULL;
+	if (!envp_or_loc || !*envp_or_loc)
+		return ;
 	while (current)
 	{
-		if (ft_strcmp(current->var, var) == 0)
+		if (ft_strcmp(current->var, to_remove) == 0)
 		{
 			if (prev)
 				prev->next = current->next;
 			else
-				*head = current->next;
+				*envp_or_loc = current->next;
 			free(current->var);
 			free(current->value);
 			free(current);
-			return (1);
+			return ;
 		}
 		prev = current;
 		current = current->next;
 	}
-	return (0);
 }
 
 char	*get_var_value(t_env **minish_envp, t_env **minish_local_var, char *VAR)

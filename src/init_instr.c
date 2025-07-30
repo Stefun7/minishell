@@ -6,11 +6,27 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/25 17:26:38 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/25 17:27:15 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 18:37:58 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../inc/minishell.h"
+
+void	mark_instructions_skipped(t_instructions **instru, size_t count)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < count + 1)
+	{
+		free_redirs((*instru)[i].in_redir, (*instru)[i].nb_files_in);
+		free_redirs((*instru)[i].out_redir, (*instru)[i].nb_files_out);
+		(*instru)[i].path_command = (char *)("");
+		(*instru)[i].in_redir = NULL;
+		(*instru)[i].out_redir = NULL;
+		i++;
+	}
+}
 
 size_t	tok_to_keep_tab_len(t_token **tokens)
 {
@@ -60,7 +76,9 @@ t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens)
 {
 	size_t			index;
 	t_instructions	*instru;
+	int				out;
 
+	out = 0;
 	index = 0;
 	instru = malloc((minish->number_of_commands + 1) * sizeof(t_instructions));
 	if (!instru)
@@ -71,7 +89,8 @@ t_instructions	*init_insrtu(t_minishell *minish, t_commands	*cmd_as_tokens)
 		instru[index].path_command = NULL;
 		instru[index].in_redir = NULL;
 		instru[index].out_redir = NULL;
-		if (!prep_set_redir(&instru[index], cmd_as_tokens, minish))
+		out = prep_set_redir(&instru[index], cmd_as_tokens, minish);
+		if (out == 0)
 			return (NULL);
 		instru[index].exec = tok_into_tab(minish, cmd_as_tokens->args);
 		if (!instru[index].exec)

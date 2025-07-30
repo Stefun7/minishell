@@ -32,6 +32,8 @@ int	ft_is_number(const char *str)
 	i = 0;
 	if (!str || !str[0])
 		return (0);
+	if (str[i] == '+' || str[i] == '-')
+		i++;
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))

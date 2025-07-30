@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 20:46:12 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 09:43:02 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 16:27:19 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,9 @@ int	exec_builtin(char **exec, t_minishell *shell)
 	if (ft_strcmp(exec[0], "pwd") == 0)
 		return (builtin_pwd());
 	if (ft_strcmp(exec[0], "exit") == 0)
-		builtin_exit(exec);
+		builtin_exit(exec, shell);
 	if (ft_strcmp(exec[0], "unset") == 0)
-		return (builtin_unset(exec, &shell->envp));
+		return (builtin_unset(exec, shell));
 	if (ft_strcmp(exec[0], "cd") == 0)
 		return (builtin_cd(exec, shell));
 	if (ft_strcmp(exec[0], "env") == 0)

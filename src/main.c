@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:43 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/28 16:11:11 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 18:34:19 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	treat_input(t_minishell **minish, char *input)
 	return (1);
 }
 
-void	init_minish(t_minishell **minish, char **envp)
+void	init_minish(t_minishell **minish, char **envp, int ac, char **av)
 {
 	char	*shlvl[3];
 
@@ -55,11 +55,12 @@ void	init_minish(t_minishell **minish, char **envp)
 	(*minish)->number_of_commands = 0;
 	(*minish)->fd_pipes = NULL;
 	(*minish)->last_exit_status = 0;
+	setup_signals();
 	if (!set_envp(&(*minish)->envp, envp))
 		exit_shell("Something went wrong while setting env\n", minish);
 	if (get_var(&(*minish)->envp, NULL, "SHLVL") == NULL)
 		exec_builtin(shlvl, (*minish));
-	setup_signals();
+	set_non_interactive(minish, ac, av);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -67,10 +68,9 @@ int	main(int ac, char **av, char **envp)
 	t_minishell		*minish;
 	char			*prompt;
 	char			*input;
-	int				input_res;
 
-	init_minish(&minish, envp);
-	while (1)
+	init_minish(&minish, envp, ac, av);
+	while (!(ac == 3 && ft_strcmp(av[1], "-c") == 0))
 	{
 		prompt = get_prompt(&minish->envp);
 		if (!prompt)
@@ -85,7 +85,5 @@ int	main(int ac, char **av, char **envp)
 			return (free(input), free_minish_total(&minish), 0);
 		free(input);
 	}
-	free_minish_total(&minish);
-	ft_printf(1, "exit\n");
-	return (0);
+	return (cleanup_and_exit(minish));
 }

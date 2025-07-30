@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/24 09:15:52 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/24 09:40:48 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 18:35:03 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ int	edit_env(char *content, t_minishell *minish)
 		value = ft_substr(equal_pos + 1, 0, ft_strlen(equal_pos + 1));
 		if (value == NULL)
 			return (free(value), -1);
-		remove_env_var(&minish->envp, var);
+		remove_var(&minish->envp, var);
+		remove_var(&minish->local_var, var);
 		if (get_var(&minish->local_var, NULL, var) != NULL)
 			update_env_value(minish->envp, var, value);
 		add_env_back(&minish->envp, var, value);
@@ -107,7 +108,7 @@ int	builtin_export(char **executables, t_minishell *minish)
 			else if (ft_strchr(executables[index], '=') != NULL)
 				edit_env(executables[index], minish);
 			else if (get_var(&minish->envp, NULL, executables[index]) == NULL)
-				add_env_back(&minish->envp, executables[index], "");
+				add_to_envp(minish, executables[index]);
 			index++;
 		}
 	}
