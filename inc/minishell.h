@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/30 18:33:20 by scesar           ###   ########.fr       */
+/*   Updated: 2025/07/30 19:27:54 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -257,16 +257,16 @@ void			treat_redir_in(t_minishell *minish, t_redir *redir,
 void			do_ins(t_minishell *minish, t_instructions *instr);
 void			treat_redir_out(t_minishell *minish, t_redir *redir, int parser,
 					int *fd);
+void			heredoc_child(char *stop, int write_fd);
 int				heredoc_handle(char *stop);
-void			no_redirection_proc(t_minishell *minish, t_instructions *instr,
-					int parser);
 int				check_perm(char *path, t_token_type type);
 char			**shift_to_first_non_empty(char **args);
 int				find_non_empty(char **str);
 int				path_has_directory(const char *path);
+void			no_redirection_proc(t_minishell *minish, t_instructions *instr,
+					int parser);
 int				dir_exists(const char *path);
 void			here_wrap(t_minishell *minish);
-void			heredoc_child(char *stop, int write_fd);
 void			silence_signals(void);
 
 //builtins
