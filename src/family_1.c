@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:33:53 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/30 18:36:20 by scesar           ###   ########.fr       */
+/*   Updated: 2025/08/01 15:30:49 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	process(t_minishell *minish)
 
 void	path_not_found(char *pcommand, t_minishell *minish)
 {
-	write(2, "bash: ", 6);
 	write(2, pcommand, ft_strlen(pcommand));
 	write(2, ": command not found\n", 21);
 	close_parent(minish);

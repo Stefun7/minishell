@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/30 19:27:54 by scesar           ###   ########.fr       */
+/*   Updated: 2025/08/01 15:15:31 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ typedef struct s_redir
 {
 	t_token_type	type;
 	char			*file_name;
+	int				index;
 }			t_redir;
 
 typedef struct s_env
@@ -114,10 +115,16 @@ void			init_minish(t_minishell **minish, char **envp,
 					int ac, char **av);
 int				is_interactive(t_minishell *minish);
 int				is_directory(const char *path);
-
+int				check_all_redirs(t_minishell *minish);
+int				check_redir_sequence(t_instructions instr, t_minishell *minish);
+int				check_perm(t_redir redir, t_minishell minish);
 //prompt.c
 char			*get_prompt(t_env **envp);
 char			*get_curr_path(t_env **envp);
+t_redir			*add_redir_out(t_redir *redir_list, t_token_type type,
+					char *file, size_t *io_index);
+t_redir			*add_redir_in(t_redir *redir_list, t_token_type type,
+					char *file, size_t *io_index);
 
 //ft_split_shell.c
 char			**ft_split_shell(char *input);
@@ -206,8 +213,6 @@ int				set_redir(t_instructions *instr, t_commands *cmd,
 					t_minishell *minish, size_t i[3]);
 int				prep_set_redir(t_instructions *instr,
 					t_commands *cmd, t_minishell *minish);
-t_redir			*add_redir(t_redir *redir_list, t_token_type type, char *file,
-					size_t *io_index);
 int				count_commands(t_commands *cmd_as_token);
 char			**tok_into_tab(t_minishell *minish, t_token **tokens);
 size_t			tok_to_keep_tab_len(t_token **tokens);
@@ -257,16 +262,15 @@ void			treat_redir_in(t_minishell *minish, t_redir *redir,
 void			do_ins(t_minishell *minish, t_instructions *instr);
 void			treat_redir_out(t_minishell *minish, t_redir *redir, int parser,
 					int *fd);
-void			heredoc_child(char *stop, int write_fd);
 int				heredoc_handle(char *stop);
-int				check_perm(char *path, t_token_type type);
+void			no_redirection_proc(t_minishell *minish, t_instructions *instr,
+					int parser);
 char			**shift_to_first_non_empty(char **args);
 int				find_non_empty(char **str);
 int				path_has_directory(const char *path);
-void			no_redirection_proc(t_minishell *minish, t_instructions *instr,
-					int parser);
 int				dir_exists(const char *path);
 void			here_wrap(t_minishell *minish);
+void			heredoc_child(char *stop, int write_fd);
 void			silence_signals(void);
 
 //builtins

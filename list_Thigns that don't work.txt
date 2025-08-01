@@ -1,15 +1,5 @@
-- executing cmd that doesnt exist like "blablabla" should print
-blablabla: command not found
-and not
-bash: blablabla: command not found
-at least on the school computers it is like this
+i didn't have time with the error message
+i did what i could
+now the order should be fixed
 
-(but when typing	"< smtthatdoesnotexist"
-bash: smtthatdoesnotexist: No such file or directory
-is printed still)
-
-- things in the perror like "wait", or "bablda" should be changed, right ?
-
-- everything works perfectly fine with locv, envv, export and unset now I think
-
-- I'll detailed avery file in the Makefile bc we can't use wildcards
+- redo the norming, just didn't change the big check_redir_sequence function, I think that's the thing you have to change again ? Don't really understand what's happening in it

@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:45:29 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/18 23:50:52 by scesar           ###   ########.fr       */
+/*   Updated: 2025/08/01 15:16:05 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	free_redirs(t_redir *redir, int count)
 	{
 		if (redir[i].file_name)
 			free(redir[i].file_name);
+		redir[i].index = 0;
 		i++;
 	}
 	free(redir);
