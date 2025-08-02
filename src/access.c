@@ -62,17 +62,17 @@ void	access_test(t_minishell *minish, t_instructions *instr, int parser)
 	int	fd;
 
 	if (instr->fd_in == -1)
-	{
 		do_ins(minish, instr);
-	}
 	else
 		instr->pipe[0] = instr->fd_in;
 	index = 0;
-	while (index < instr->nb_files_out)
+	while (index < instr->nb_files_out && instr->out_redir[index].index != -1)
 	{
-		ft_printf(2, "%s\n", instr->out_redir[index].file_name);
 		treat_redir_out(minish, &instr->out_redir[index], parser, &fd);
-		if (index != instr->nb_files_out - 1)
+		if (fd < 0)
+			error(minish, "couldn't open file",
+				instr->out_redir[index].file_name, 126);
+		if (fd > 0 && (index != instr->nb_files_out - 1 || instr->skip))
 			close(fd);
 		else
 			instr->pipe[1] = fd;
@@ -81,19 +81,20 @@ void	access_test(t_minishell *minish, t_instructions *instr, int parser)
 }
 
 void	no_redirection_proc(t_minishell *minish, t_instructions *instr,
-		int parser)
+int parser)
 {
-	if (instr->nb_files_in > 0)
+	if (instr->nb_files_in > 0 && instr->pipe[0] >= 0)
 		dup2(instr->pipe[0], STDIN_FILENO);
-	else if (parser != 0)
+	else if (parser != 0 && minish->fd_pipes[parser - 1][0] >= 0)
 		dup2(minish->fd_pipes[parser - 1][0], STDIN_FILENO);
-	if (instr->nb_files_out > 0)
+	if (instr->nb_files_out > 0 && instr->pipe[1] >= 0)
 		dup2(instr->pipe[1], STDOUT_FILENO);
-	else if (parser != minish->number_of_commands - 1)
+	else if (parser != minish->number_of_commands - 1
+		&& minish->fd_pipes[parser][1] >= 0)
 		dup2(minish->fd_pipes[parser][1], STDOUT_FILENO);
 	close_stuff(minish, parser);
-	if (instr->nb_files_in > 0)
+	if (instr->nb_files_in > 0 && instr->pipe[0] >= 0)
 		close(instr->pipe[0]);
-	if (instr->nb_files_out > 0)
+	if (instr->nb_files_out > 0 && instr->pipe[1] >= 0)
 		close(instr->pipe[1]);
 }

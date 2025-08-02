@@ -39,20 +39,11 @@ void	enable_echoctl(void)
 
 int	handle_exit_status(int status)
 {
-	int	sig;
-
-	if (WIFSIGNALED(status))
-	{
-		sig = WTERMSIG(status);
-		if (sig == SIGQUIT)
-			write(2, "Quit (core dumped)\n", 20);
-		else if (sig == SIGINT)
-			write(2, "\n", 1);
-		return (128 + sig);
-	}
-	else if (WIFEXITED(status))
+	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	return (1);
+	else if (WIFSIGNALED(status))
+		return (128 + WTERMSIG(status));
+	return (status);
 }
 
 void	setup_signals(void)

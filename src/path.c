@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/27 16:01:27 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/23 20:39:58 by scesar           ###   ########.fr       */
+/*   Updated: 2025/08/02 13:40:58 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ char	*get_path(char *command_to_path, char *paths, int index)
 {
 	char	*full_path;
 
+	if (command_to_path[0] == '\0')
+		return (command_to_path);
 	if (command_to_path == NULL || command_to_path[0] == 32)
 		return (NULL);
 	while (paths[index] != '\0')

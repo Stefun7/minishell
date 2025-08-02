@@ -17,7 +17,6 @@ int	process_redir(t_redir *redir_list,
 {
 	if (!filename)
 		return (0);
-	printf("Processing redir: type=%d file=%s \n", (int)type, filename);
 	if (in_tok(type))
 	{
 		if (!add_redir_in(redir_list, type, filename, redir_index))

@@ -12,10 +12,18 @@
 
 #include "../inc/minishell.h"
 
-int	exec_builtin(char **exec, t_minishell *shell)
+int	exec_builtin(char **exec, t_minishell *shell, int parent)
 {
 	if (!is_builtin(exec[0]))
 		return (-1);
+	if (parent == 1)
+	{
+		access_test(shell, &shell->instru[0], 0);
+		if (shell->instru[0].nb_files_in > 0 && shell->instru[0].pipe[0] >= 0)
+			close(shell->instru[0].pipe[0]);
+		if (shell->instru[0].nb_files_out > 0 && shell->instru[0].pipe[1] >= 0)
+			close(shell->instru[0].pipe[1]);
+	}
 	if (ft_strcmp(exec[0], "echo") == 0)
 		return (builtin_echo(exec));
 	if (ft_strcmp(exec[0], "pwd") == 0)
@@ -101,7 +109,7 @@ int	builtin_pwd(void)
 	char	cwd[500];
 
 	if (getcwd(cwd, sizeof(cwd)))
-		printf("%s\n", cwd);
+		ft_printf(1, "%s\n", cwd);
 	else
 		perror("pwd");
 	return (0);

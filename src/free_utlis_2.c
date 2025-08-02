@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/18 23:54:27 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/18 23:54:57 by scesar           ###   ########.fr       */
+/*   Updated: 2025/08/02 13:20:01 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,10 @@ void	free_tab(char **tab)
 		i++;
 	}
 	free(tab);
+}
+
+void	reject_prog(void)
+{
+	printf("minishell : no argument required\n");
+	exit(-1);
 }

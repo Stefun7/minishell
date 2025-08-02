@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 14:45:43 by scesar            #+#    #+#             */
-/*   Updated: 2025/07/30 18:34:19 by scesar           ###   ########.fr       */
+/*   Updated: 2025/08/02 13:43:07 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void	init_minish(t_minishell **minish, char **envp, int ac, char **av)
 	if (!set_envp(&(*minish)->envp, envp))
 		exit_shell("Something went wrong while setting env\n", minish);
 	if (get_var(&(*minish)->envp, NULL, "SHLVL") == NULL)
-		exec_builtin(shlvl, (*minish));
+		exec_builtin(shlvl, (*minish), 0);
 	set_non_interactive(minish, ac, av);
 }
 
@@ -69,6 +69,8 @@ int	main(int ac, char **av, char **envp)
 	char			*prompt;
 	char			*input;
 
+	if (ac > 1)
+		reject_prog();
 	init_minish(&minish, envp, ac, av);
 	while (!(ac == 3 && ft_strcmp(av[1], "-c") == 0))
 	{

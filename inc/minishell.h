@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/08/01 15:15:31 by scesar           ###   ########.fr       */
+/*   Updated: 2025/08/02 13:20:49 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ int				is_interactive(t_minishell *minish);
 int				is_directory(const char *path);
 int				check_all_redirs(t_minishell *minish);
 int				check_redir_sequence(t_instructions instr, t_minishell *minish);
-int				check_perm(t_redir redir, t_minishell minish);
+int				check_perm(t_redir redir, t_minishell *minish);
 //prompt.c
 char			*get_prompt(t_env **envp);
 char			*get_curr_path(t_env **envp);
@@ -234,6 +234,8 @@ void			free_array(char ***array);
 void			free_pipe(t_token **tokens);
 int				cleanup_and_exit(t_minishell *minish);
 int				treat_input(t_minishell **minish, char *input);
+void			reject_prog(void);
+
 ///////////////////////////////////EXECUTION///////////////////////////////////
 
 //family
@@ -279,7 +281,7 @@ int				check_n_flags(char **argv);
 int				is_builtin(char *cmd);
 int				built_in_parent(char *cmd);
 int				builtin_env(t_env *envp);
-int				exec_builtin(char **executables, t_minishell *shell);
+int				exec_builtin(char **exec, t_minishell *shell, int parent);
 int				builtin_echo(char **executables);
 int				builtin_cd(char **executables, t_minishell *minish);
 int				builtin_pwd(void);
