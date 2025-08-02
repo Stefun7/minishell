@@ -6,7 +6,7 @@
 /*   By: scesar <scesar@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 16:52:09 by scesar            #+#    #+#             */
-/*   Updated: 2025/08/02 13:20:49 by scesar           ###   ########.fr       */
+/*   Updated: 2025/08/02 14:25:59 by scesar           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,7 @@ void			free_array(char ***array);
 void			free_pipe(t_token **tokens);
 int				cleanup_and_exit(t_minishell *minish);
 int				treat_input(t_minishell **minish, char *input);
-void			reject_prog(void);
+void			reject_prog(int ac, char **av);
 
 ///////////////////////////////////EXECUTION///////////////////////////////////
 
