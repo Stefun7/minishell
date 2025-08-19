@@ -1,5 +1,0 @@
-i didn't have time with the error message
-i did what i could
-now the order should be fixed
-
-- redo the norming, just didn't change the big check_redir_sequence function, I think that's the thing you have to change again ? Don't really understand what's happening in it

@@ -1,3 +1,0 @@
-there's issues with orders of errors in redirection perm checking 
-also empty commands should be booted out if a potential command follows in execute but i'll do both
-also heredoc which i've already asked from you
